@@ -19,7 +19,7 @@ Download the dataset. The dataset is downloaded and extracted to the `data` dire
 Filter out noise data and serialize images and labels for training into `.mat` file.
 Please check `check_dataset.ipynb` for the details of the dataset.
 ```sh
-python create_db.py --output data/imdb_db.mat --db imdb --img_size 64
+python3 create_db.py --output data/imdb_db.mat --db imdb --img_size 64
 ```
 
 Train the network using the training data created above.
