@@ -40,4 +40,4 @@ Note that age and gender are estimated independently using different two CNNs.
 ## Results
 Trained on imdb, tested on wiki.
 
-![result](wiki/images/result.png)
+![result](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
