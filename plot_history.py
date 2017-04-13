@@ -1,0 +1,40 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import argparse
+
+
+def get_args():
+    parser = argparse.ArgumentParser(description="This script shows training graph from history file.")
+    parser.add_argument("--input", "-i", type=str, required=True,
+                        help="path to input history h5 file")
+    args = parser.parse_args()
+    return args
+
+
+def main():
+    args = get_args()
+    input_path = args.input
+
+    df = pd.read_hdf(input_path, "history")
+    plt.plot(df["dense_1_loss"], label="loss (gender)")
+    plt.plot(df["dense_2_loss"], label="loss (age)")
+    plt.plot(df["val_dense_1_loss"], label="val_loss (gender)")
+    plt.plot(df["val_dense_2_loss"], label="val_loss (age)")
+    plt.xlabel("number of epochs")
+    plt.ylabel("loss")
+    plt.legend()
+    plt.savefig("loss.png")
+    plt.cla()
+
+    plt.plot(df["dense_1_acc"], label="accuracy (gender)")
+    plt.plot(df["dense_2_acc"], label="accuracy (age)")
+    plt.plot(df["val_dense_1_acc"], label="val_accuracy (gender)")
+    plt.plot(df["val_dense_2_acc"], label="val_accuracy (age)")
+    plt.xlabel("number of epochs")
+    plt.ylabel("accuracy")
+    plt.legend()
+    plt.savefig("accuracy.png")
+
+
+if __name__ == '__main__':
+    main()
