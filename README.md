@@ -2,14 +2,15 @@
 This is a Keras implementation of a CNN network for estimating age and gender from a face image.
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
+
 ## Dependencies
 - Python3.5+
 - Keras
 - scipy, numpy, Pandas, tqdm
 - OpenCV3
 
-## Usage
 
+## Usage
 Download the dataset. The dataset is downloaded and extracted to the `data` directory.
 
 ```sh
@@ -28,9 +29,15 @@ Train the network using the training data created above.
 python3 train.py --input data/imdb_db.mat
 ```
 
+
 ## Network architecture
 In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf), the pretrained VGG network is adopted.
 Here the Wide Residual Network (WideResNet) is trained from scratch.
 I modified the @asmith26's implementation of the WideResNet; two classification layers (for age and gender estimation) are added on the top of the WideResNet.
 Note that age and gender are estimated independently using different two CNNs.
 
+
+## Results
+Trained on imdb, tested on wiki.
+
+![result](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
