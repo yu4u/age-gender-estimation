@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
+import os
 
 
 def get_args():
@@ -16,6 +17,7 @@ def main():
     input_path = args.input
 
     df = pd.read_hdf(input_path, "history")
+    input_dir = os.path.dirname(input_path)
     plt.plot(df["dense_1_loss"], label="loss (gender)")
     plt.plot(df["dense_2_loss"], label="loss (age)")
     plt.plot(df["val_dense_1_loss"], label="val_loss (gender)")
@@ -23,7 +25,7 @@ def main():
     plt.xlabel("number of epochs")
     plt.ylabel("loss")
     plt.legend()
-    plt.savefig("loss.png")
+    plt.savefig(os.path.join(input_dir, "loss.png"))
     plt.cla()
 
     plt.plot(df["dense_1_acc"], label="accuracy (gender)")
@@ -33,7 +35,7 @@ def main():
     plt.xlabel("number of epochs")
     plt.ylabel("accuracy")
     plt.legend()
-    plt.savefig("accuracy.png")
+    plt.savefig(os.path.join(input_dir, "accuracy.png"))
 
 
 if __name__ == '__main__':
