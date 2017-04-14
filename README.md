@@ -4,6 +4,8 @@ In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/i
 
 
 ## Dependencies
+Tested on Ubuntu 16.04, Python 3.5.2, CUDA 8.0, cuDNN 5.0.
+
 - Python3.5+
 - Keras
 - scipy, numpy, Pandas, tqdm
@@ -11,24 +13,36 @@ In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/i
 
 
 ## Usage
-Download the dataset. The dataset is downloaded and extracted to the `data` directory.
+### Download the dataset
+The dataset is downloaded and extracted to the `data` directory.
 
 ```sh
 ./download.sh
 ```
 
+### Create data
 Filter out noise data and serialize images and labels for training into `.mat` file.
 Please check `check_dataset.ipynb` for the details of the dataset.
 ```sh
 python3 create_db.py --output data/imdb_db.mat --db imdb --img_size 64
 ```
 
+### Train network
 Train the network using the training data created above.
 
 ```sh
 python3 train.py --input data/imdb_db.mat
 ```
 
+Plot training curves from history file.
+
+```sh
+python3 plot_history.py -input models/history_16_8.h5 
+```
+
+![](https://github.com/yu4u/age-gender-estimation/wiki/images/loss.png)
+
+![](https://github.com/yu4u/age-gender-estimation/wiki/images/accuracy.png)
 
 ## Network architecture
 In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf), the pretrained VGG network is adopted.
@@ -39,5 +53,4 @@ Note that age and gender are estimated independently using different two CNNs.
 
 ## Results
 Trained on imdb, tested on wiki.
-
-![result](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
+![](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
