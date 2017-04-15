@@ -4,30 +4,50 @@ In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/i
 
 
 ## Dependencies
-Tested on Ubuntu 16.04, Python 3.5.2, CUDA 8.0, cuDNN 5.0.
-
 - Python3.5+
 - Keras
-- scipy, numpy, Pandas, tqdm
+- scipy, numpy, Pandas, tqdm, tables, h5py
+- dlib (for demo)
 - OpenCV3
+
+Tested on:
+- Ubuntu 16.04, Python 3.5.2, Keras 2.0.3, Tensorflow(-gpu) 1.0.1, CUDA 8.0, cuDNN 5.0
+- macOS Sierra, Python 3.6.0, Keras 2.0.2, Tensorflow 1.0.0
 
 
 ## Usage
-### Download the dataset
+
+### Use pretrained model
+Downlaod pretrained model
+
+```sh
+mkdir -p pretrained_model
+wegt -O pretrained_model https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5
+```
+
+Run demo script (requires web cam)
+
+```sh
+python3 demo.py
+```
+
+### Train a model using the IMDB-WIKI dataset
+
+#### Download the dataset
 The dataset is downloaded and extracted to the `data` directory.
 
 ```sh
 ./download.sh
 ```
 
-### Create data
+#### Create data
 Filter out noise data and serialize images and labels for training into `.mat` file.
 Please check `check_dataset.ipynb` for the details of the dataset.
 ```sh
 python3 create_db.py --output data/imdb_db.mat --db imdb --img_size 64
 ```
 
-### Train network
+#### Train network
 Train the network using the training data created above.
 
 ```sh
