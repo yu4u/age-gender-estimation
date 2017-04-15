@@ -18,7 +18,7 @@ Tested on:
 ## Usage
 
 ### Use pretrained model
-Downlaod pretrained model
+Download pretrained model
 
 ```sh
 mkdir -p pretrained_model
