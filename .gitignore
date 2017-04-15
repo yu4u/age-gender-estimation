@@ -103,3 +103,4 @@ ENV/
 /data/
 /models/
 /checkpoints/
+/pretrained_models/

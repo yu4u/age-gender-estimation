@@ -21,8 +21,8 @@ Tested on:
 Download pretrained model
 
 ```sh
-mkdir -p pretrained_model
-wegt -O pretrained_model https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5
+mkdir -p pretrained_models
+wget -P pretrained_models https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5
 ```
 
 Run demo script (requires web cam)
