@@ -1,5 +1,5 @@
 # Age and Gender Estimation
-This is a Keras implementation of a CNN network for estimating age and gender from a face image.
+This is a Keras implementation of a CNN network for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
 
@@ -74,3 +74,10 @@ Note that age and gender are estimated independently using different two CNNs.
 ## Results
 Trained on imdb, tested on wiki.
 ![](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
+
+
+## References
+[1] R. Rothe, R. Timofte, and L. V. Gool, "DEX: Deep EXpectation of apparent age from a single image," ICCV, 2015.
+
+[2] R. Rothe, R. Timofte, and L. V. Gool, "Deep expectation of real and apparent age from a single image
+without facial landmarks," IJCV, 2016.
