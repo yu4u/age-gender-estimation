@@ -42,7 +42,7 @@ The dataset is downloaded and extracted to the `data` directory.
 
 #### Create data
 Filter out noise data and serialize images and labels for training into `.mat` file.
-Please check `check_dataset.ipynb` for the details of the dataset.
+Please check [check_dataset.ipynb](check_dataset.ipynb) for the details of the dataset.
 ```sh
 python3 create_db.py --output data/imdb_db.mat --db imdb --img_size 64
 ```
@@ -65,10 +65,11 @@ python3 plot_history.py -input models/history_16_8.h5
 ![](https://github.com/yu4u/age-gender-estimation/wiki/images/accuracy.png)
 
 ## Network architecture
-In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf), the pretrained VGG network is adopted.
+In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf) [1, 2], the pretrained VGG network is adopted.
 Here the Wide Residual Network (WideResNet) is trained from scratch.
 I modified the @asmith26's implementation of the WideResNet; two classification layers (for age and gender estimation) are added on the top of the WideResNet.
-Note that age and gender are estimated independently using different two CNNs.
+
+Note that while age and gender are independently estimated by different two CNNs in [1, 2], in my implementation, they are simultaneously estimated using a single CNN.
 
 
 ## Results
