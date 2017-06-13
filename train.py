@@ -82,7 +82,7 @@ def main():
                  ]
 
     logging.debug("Running training...")
-    hist = model.fit(X_data, [y_data_g, y_data_a], batch_size=batch_size, nb_epoch=nb_epochs, callbacks=callbacks,
+    hist = model.fit(X_data, [y_data_g, y_data_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
                      validation_split=validation_split)
 
     logging.debug("Saving weights...")
