@@ -5,7 +5,7 @@ In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/i
 
 ## Dependencies
 - Python3.5+
-- Keras
+- Keras2.0+
 - scipy, numpy, Pandas, tqdm, tables, h5py
 - dlib (for demo)
 - OpenCV3
