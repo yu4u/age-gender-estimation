@@ -57,7 +57,7 @@ python3 train.py --input data/imdb_db.mat
 Plot training curves from history file.
 
 ```sh
-python3 plot_history.py -input models/history_16_8.h5 
+python3 plot_history.py --input models/history_16_8.h5 
 ```
 
 ![](https://github.com/yu4u/age-gender-estimation/wiki/images/loss.png)
