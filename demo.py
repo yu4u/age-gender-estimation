@@ -30,6 +30,11 @@ def main():
     while True:
         # get video frame
         ret, img = cap.read()
+
+        if not ret:
+            print("error: failed to capture image")
+            return -1
+
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
 
