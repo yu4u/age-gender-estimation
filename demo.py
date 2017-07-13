@@ -52,11 +52,12 @@ def main():
             # cv2.rectangle(img, (xw1, yw1), (xw2, yw2), (255, 0, 0), 2)
             faces[i,:,:,:] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
 
-        # predict ages and genders of the detected faces
-        results = model.predict(faces)
-        predicted_genders = results[0]
-        ages = np.arange(0, 101).reshape(101, 1)
-        predicted_ages = results[1].dot(ages).flatten()
+        if len(detected) > 0:
+            # predict ages and genders of the detected faces
+            results = model.predict(faces)
+            predicted_genders = results[0]
+            ages = np.arange(0, 101).reshape(101, 1)
+            predicted_ages = results[1].dot(ages).flatten()
 
         # draw results
         for i, d in enumerate(detected):
