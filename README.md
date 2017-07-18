@@ -18,7 +18,7 @@ Tested on:
 ## Usage
 
 ### Use pretrained model
-Download pretrained model
+Download pretrained model weights for TensorFlow backend:
 
 ```sh
 mkdir -p pretrained_models
@@ -30,6 +30,8 @@ Run demo script (requires web cam)
 ```sh
 python3 demo.py
 ```
+
+Model weights for Theano backend is also available from [here](https://drive.google.com/file/d/0B_cG1nzvVZlQWGJMc2JjdzkwcVk/view?usp=sharing).
 
 ### Train a model using the IMDB-WIKI dataset
 
