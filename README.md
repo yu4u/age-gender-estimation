@@ -11,8 +11,9 @@ In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/i
 - OpenCV3
 
 Tested on:
-- Ubuntu 16.04, Python 3.5.2, Keras 2.0.3, Tensorflow(-gpu) 1.0.1, CUDA 8.0, cuDNN 5.0
-- macOS Sierra, Python 3.6.0, Keras 2.0.2, Tensorflow 1.0.0
+- Ubuntu 16.04, Python 3.5.2, Keras 2.0.3, Tensorflow(-gpu) 1.0.1, Theano 0.9.0, CUDA 8.0, cuDNN 5.0
+  - CPU: i7-7700 3.60GHz, GPU: GeForce GTX1080
+- macOS Sierra, Python 3.6.0, Keras 2.0.2, Tensorflow 1.0.0, Theano 0.9.0
 
 
 ## Usage
