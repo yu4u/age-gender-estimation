@@ -2,7 +2,20 @@ import os
 import cv2
 import dlib
 import numpy as np
+import argparse
 from wide_resnet import WideResNet
+
+
+def get_args():
+    parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.")
+    parser.add_argument("--weight_file", type=str, default=None,
+                        help="path to weight file (e.g. weights.18-4.06.hdf5)")
+    parser.add_argument("--depth", type=int, default=16,
+                        help="depth of network")
+    parser.add_argument("--width", type=int, default=8,
+                        help="width of network")
+    args = parser.parse_args()
+    return args
 
 
 def draw_label(image, point, label, font=cv2.FONT_HERSHEY_SIMPLEX,
@@ -14,13 +27,21 @@ def draw_label(image, point, label, font=cv2.FONT_HERSHEY_SIMPLEX,
 
 
 def main():
+    args = get_args()
+    depth = args.depth
+    k = args.width
+    weight_file = args.weight_file
+
+    if not weight_file:
+        weight_file = os.path.join("pretrained_models", "weights.18-4.06.hdf5")
+
     # for face detection
     detector = dlib.get_frontal_face_detector()
 
     # load model and weights
     img_size = 64
-    model = WideResNet(img_size, depth=16, k=8)()
-    model.load_weights(os.path.join("pretrained_models", "weights.18-4.06.hdf5"))
+    model = WideResNet(img_size, depth=depth, k=k)()
+    model.load_weights(weight_file)
 
     # capture video
     cap = cv2.VideoCapture(0)
