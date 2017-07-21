@@ -1,5 +1,5 @@
 # Age and Gender Estimation
-This is a Keras implementation of a CNN network for estimating age and gender from a face image [1, 2].
+This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
 
@@ -43,7 +43,7 @@ The dataset is downloaded and extracted to the `data` directory.
 ./download.sh
 ```
 
-#### Create data
+#### Create training data
 Filter out noise data and serialize images and labels for training into `.mat` file.
 Please check [check_dataset.ipynb](check_dataset.ipynb) for the details of the dataset.
 ```sh
@@ -57,15 +57,27 @@ Train the network using the training data created above.
 python3 train.py --input data/imdb_db.mat
 ```
 
-Plot training curves from history file.
+Trained weight files are stored as `checkpoints/weights.*.hdf5` for each epoch if the validation loss becomes minimum over previous epochs.
+
+#### Use the trained network
+
+```sh
+python3 demo.py --weight_file WEIGHT_FILE --depth DEPTH --width WIDTH
+```
+
+Please use the best model among `checkpoints/weights.*.hdf5` for `WEIGHT_FILE`.
+
+#### Plot training curves from history file
 
 ```sh
 python3 plot_history.py --input models/history_16_8.h5 
 ```
 
-![](https://github.com/yu4u/age-gender-estimation/wiki/images/loss.png)
+<img src="https://github.com/yu4u/age-gender-estimation/wiki/images/loss.png" width="400px">
 
-![](https://github.com/yu4u/age-gender-estimation/wiki/images/accuracy.png)
+
+
+<img src="https://github.com/yu4u/age-gender-estimation/wiki/images/accuracy.png" width="400px">
 
 ## Network architecture
 In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf) [1, 2], the pretrained VGG network is adopted.
