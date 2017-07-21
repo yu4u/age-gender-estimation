@@ -26,7 +26,8 @@ class Schedule:
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.")
+    parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--input", "-i", type=str, required=True,
                         help="path to input database mat file")
     parser.add_argument("--batch_size", type=int, default=32,
@@ -34,7 +35,7 @@ def get_args():
     parser.add_argument("--nb_epochs", type=int, default=30,
                         help="number of epochs")
     parser.add_argument("--depth", type=int, default=16,
-                        help="depth of network")
+                        help="depth of network (should be 10, 16, 22, 28, ...)")
     parser.add_argument("--width", type=int, default=8,
                         help="width of network")
     parser.add_argument("--validation_split", type=float, default=0.1,

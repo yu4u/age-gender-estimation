@@ -7,7 +7,8 @@ from wide_resnet import WideResNet
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.")
+    parser = argparse.ArgumentParser(description="This script trains the CNN model for age and gender estimation.",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--weight_file", type=str, default=None,
                         help="path to weight file (e.g. weights.18-4.06.hdf5)")
     parser.add_argument("--depth", type=int, default=16,
