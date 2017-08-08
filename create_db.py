@@ -7,7 +7,8 @@ from utils import get_meta
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="This script automatically blur input video.",
+    parser = argparse.ArgumentParser(description="This script cleans-up noisy labels "
+                                                 "and creates database for training.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--output", "-o", type=str, required=True,
                         help="path to output database mat file")
