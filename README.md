@@ -50,6 +50,19 @@ Please check [check_dataset.ipynb](check_dataset.ipynb) for the details of the d
 python3 create_db.py --output data/imdb_db.mat --db imdb --img_size 64
 ```
 
+```sh
+usage: create_db.py [-h] --output OUTPUT [--db DB] [--img_size IMG_SIZE] [--min_score MIN_SCORE]
+
+This script cleans-up noisy labels and creates database for training.
+
+optional arguments:
+  -h, --help                 show this help message and exit
+  --output OUTPUT, -o OUTPUT path to output database mat file (default: None)
+  --db DB                    dataset; wiki or imdb (default: wiki)
+  --img_size IMG_SIZE        output image size (default: 32)
+  --min_score MIN_SCORE      minimum face_score (default: 1.0)
+```
+
 #### Train network
 Train the network using the training data created above.
 
@@ -59,13 +72,44 @@ python3 train.py --input data/imdb_db.mat
 
 Trained weight files are stored as `checkpoints/weights.*.hdf5` for each epoch if the validation loss becomes minimum over previous epochs.
 
+```sh
+usage: train.py [-h] --input INPUT [--batch_size BATCH_SIZE]
+                [--nb_epochs NB_EPOCHS] [--depth DEPTH] [--width WIDTH]
+                [--validation_split VALIDATION_SPLIT]
+
+This script trains the CNN model for age and gender estimation.
+
+optional arguments:
+  -h, --help                          show this help message and exit
+  --input INPUT, -i INPUT             path to input database mat file (default: None)
+  --batch_size BATCH_SIZE             batch size (default: 32)
+  --nb_epochs NB_EPOCHS               number of epochs (default: 30)
+  --depth DEPTH                       depth of network (should be 10, 16, 22, 28, ...) (default: 16)
+  --width WIDTH                       width of network (default: 8)
+  --validation_split VALIDATION_SPLIT validation split ratio (default: 0.1)
+```
+
 #### Use the trained network
 
 ```sh
-python3 demo.py --weight_file WEIGHT_FILE --depth DEPTH --width WIDTH
+python3 demo.py
 ```
 
-Please use the best model among `checkpoints/weights.*.hdf5` for `WEIGHT_FILE`.
+```sh
+usage: demo.py [-h] [--weight_file WEIGHT_FILE] [--depth DEPTH] [--width WIDTH]
+
+This script detects faces from web cam input, and estimates age and gender for
+the detected faces.
+
+optional arguments:
+  -h, --help                show this help message and exit
+  --weight_file WEIGHT_FILE path to weight file (e.g. weights.18-4.06.hdf5) (default: None)
+  --depth DEPTH             depth of network (default: 16)
+  --width WIDTH             width of network (default: 8)
+
+```
+
+Please use the best model among `checkpoints/weights.*.hdf5` for `WEIGHT_FILE` if you use your own trained models.
 
 #### Plot training curves from history file
 
