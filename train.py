@@ -119,7 +119,7 @@ def main():
                                    epochs=nb_epochs, verbose=1,
                                    callbacks=callbacks)
     else:
-        hist = model.fit(X_data, [y_data_g, y_data_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
+        hist = model.fit(X_train, [y_train_g, y_train_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
                          validation_data=(X_test, [y_test_g, y_test_a]))
 
     logging.debug("Saving weights...")
