@@ -2,11 +2,15 @@ import pandas as pd
 import logging
 import argparse
 import os
+import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint
 from keras.optimizers import SGD
 from keras.utils import np_utils
 from wide_resnet import WideResNet
 from utils import mk_dir, load_data
+from keras.preprocessing.image import ImageDataGenerator
+from mixup_generator import MixupGenerator
+from random_eraser import get_random_eraser
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -40,6 +44,8 @@ def get_args():
                         help="width of network")
     parser.add_argument("--validation_split", type=float, default=0.1,
                         help="validation split ratio")
+    parser.add_argument("--aug", action="store_true",
+                        help="use data augmentation if set true")
     args = parser.parse_args()
     return args
 
@@ -52,6 +58,7 @@ def main():
     depth = args.depth
     k = args.width
     validation_split = args.validation_split
+    use_augmentation = args.aug
 
     logging.debug("Loading data...")
     image, gender, age, _, image_size, _ = load_data(input_path)
@@ -83,8 +90,37 @@ def main():
                  ]
 
     logging.debug("Running training...")
-    hist = model.fit(X_data, [y_data_g, y_data_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
-                     validation_split=validation_split)
+
+    data_num = len(X_data)
+    indexes = np.arange(data_num)
+    np.random.shuffle(indexes)
+    X_data = X_data[indexes]
+    y_data_g = y_data_g[indexes]
+    y_data_a = y_data_a[indexes]
+    train_num = int(data_num * (1 - validation_split))
+    X_train = X_data[:train_num]
+    X_test = X_data[train_num:]
+    y_train_g = y_data_g[:train_num]
+    y_test_g = y_data_g[train_num:]
+    y_train_a = y_data_a[:train_num]
+    y_test_a = y_data_a[train_num:]
+
+    if use_augmentation:
+        datagen = ImageDataGenerator(
+            width_shift_range=0.1,
+            height_shift_range=0.1,
+            horizontal_flip=True,
+            preprocessing_function=get_random_eraser(v_l=0, v_h=255))
+        training_generator = MixupGenerator(X_train, [y_train_g, y_train_a], batch_size=batch_size, alpha=0.2,
+                                            datagen=datagen)()
+        hist = model.fit_generator(generator=training_generator,
+                                   steps_per_epoch=train_num // batch_size,
+                                   validation_data=(X_test, [y_test_g, y_test_a]),
+                                   epochs=nb_epochs, verbose=1,
+                                   callbacks=callbacks)
+    else:
+        hist = model.fit(X_train, [y_train_g, y_train_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
+                         validation_data=(X_test, [y_test_g, y_test_a]))
 
     logging.debug("Saving weights...")
     model.save_weights(os.path.join("models", "WRN_{}_{}.h5".format(depth, k)), overwrite=True)

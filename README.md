@@ -2,7 +2,6 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
-
 ## Dependencies
 - Python3.5+
 - Keras2.0+
@@ -75,19 +74,39 @@ Trained weight files are stored as `checkpoints/weights.*.hdf5` for each epoch i
 ```sh
 usage: train.py [-h] --input INPUT [--batch_size BATCH_SIZE]
                 [--nb_epochs NB_EPOCHS] [--depth DEPTH] [--width WIDTH]
-                [--validation_split VALIDATION_SPLIT]
+                [--validation_split VALIDATION_SPLIT] [--aug]
 
 This script trains the CNN model for age and gender estimation.
 
 optional arguments:
-  -h, --help                          show this help message and exit
-  --input INPUT, -i INPUT             path to input database mat file (default: None)
-  --batch_size BATCH_SIZE             batch size (default: 32)
-  --nb_epochs NB_EPOCHS               number of epochs (default: 30)
-  --depth DEPTH                       depth of network (should be 10, 16, 22, 28, ...) (default: 16)
-  --width WIDTH                       width of network (default: 8)
-  --validation_split VALIDATION_SPLIT validation split ratio (default: 0.1)
+  -h, --help            show this help message and exit
+  --input INPUT, -i INPUT
+                        path to input database mat file (default: None)
+  --batch_size BATCH_SIZE
+                        batch size (default: 32)
+  --nb_epochs NB_EPOCHS
+                        number of epochs (default: 30)
+  --depth DEPTH         depth of network (should be 10, 16, 22, 28, ...)
+                        (default: 16)
+  --width WIDTH         width of network (default: 8)
+  --validation_split VALIDATION_SPLIT
+                        validation split ratio (default: 0.1)
+  --aug                 use data augmentation if set true (default: False)
 ```
+
+#### Train network with recent data augmentation methods
+Recent data augmentation methods, mixup [3] and Random Erasing [4],
+can be used with standard data augmentation by `--aug` option in training:
+
+```bash
+python3 train.py --input data/imdb_db.mat --aug
+```
+
+Please refer to [this repository](https://github.com/yu4u/mixup-generator) for implementation details.
+
+I confirmed that data augmentation enables us to avoid overfitting
+and improves validation loss.
+
 
 #### Use the trained network
 
@@ -117,11 +136,22 @@ Please use the best model among `checkpoints/weights.*.hdf5` for `WEIGHT_FILE` i
 python3 plot_history.py --input models/history_16_8.h5 
 ```
 
+##### Results without data augmentation
 <img src="https://github.com/yu4u/age-gender-estimation/wiki/images/loss.png" width="400px">
 
-
-
 <img src="https://github.com/yu4u/age-gender-estimation/wiki/images/accuracy.png" width="400px">
+
+##### Results with data augmentation
+The best val_loss was improved from 3.969 to 3.731:
+- Without data augmentation: 3.969
+- With standard data augmentation: 3.799
+- With mixup and random erasing: 3.731
+
+<img src="fig/loss.png" width="480px">
+
+We can see that, with data augmentation,
+overfitting did not occur even at very small learning rates (epoch > 15).
+
 
 ## Network architecture
 In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf) [1, 2], the pretrained VGG network is adopted.
@@ -141,3 +171,7 @@ Trained on imdb, tested on wiki.
 
 [2] R. Rothe, R. Timofte, and L. V. Gool, "Deep expectation of real and apparent age from a single image
 without facial landmarks," IJCV, 2016.
+
+[3] H. Zhang, M. Cisse, Y. N. Dauphin, and D. Lopez-Paz, "mixup: Beyond Empirical Risk Minimization," in arXiv:1710.09412, 2017.
+
+[4] Z. Zhong, L. Zheng, G. Kang, S. Li, and Y. Yang, "Random Erasing Data Augmentation," in arXiv:1708.04896, 2017.
