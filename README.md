@@ -17,21 +17,14 @@ Tested on:
 
 ## Usage
 
-### Use pretrained model
-Download pretrained model weights for TensorFlow backend:
-
-```sh
-mkdir -p pretrained_models
-wget -P pretrained_models https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5
-```
-
-Run demo script (requires web cam)
+### Use pretrained model for demo
+Run demo the script (requires web cam)
 
 ```sh
 python3 demo.py
 ```
 
-Model weights for Theano backend is also available from [here](https://drive.google.com/file/d/0B_cG1nzvVZlQWGJMc2JjdzkwcVk/view?usp=sharing).
+The pretrained model for TensorFlow backend will be automatically downloaded to the `pretrained_models` directory.
 
 ### Train a model using the IMDB-WIKI dataset
 

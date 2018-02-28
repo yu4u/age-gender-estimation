@@ -4,6 +4,10 @@ import dlib
 import numpy as np
 import argparse
 from wide_resnet import WideResNet
+from keras.utils.data_utils import get_file
+
+pretrained_model = "https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5?dl=1"
+modhash = '89f56a39a78454e96379348bddd78c0d'
 
 
 def get_args():
@@ -35,7 +39,8 @@ def main():
     weight_file = args.weight_file
 
     if not weight_file:
-        weight_file = os.path.join("pretrained_models", "weights.18-4.06.hdf5")
+        weight_file = get_file("weights.18-4.06.hdf5", pretrained_model, cache_subdir="pretrained_models",
+                               file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
