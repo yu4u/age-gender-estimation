@@ -39,8 +39,8 @@ def main():
     weight_file = args.weight_file
 
     if not weight_file:
-        #weight_file = os.path.join("pretrained_models", "weights.18-4.06.hdf5")
-        weight_file = get_file("weights.18-4.06.hdf5", pretrained_model, cache_subdir="models", file_hash=modhash)
+        weight_file = get_file("weights.18-4.06.hdf5", pretrained_model, cache_subdir="pretrained_models",
+                               file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
