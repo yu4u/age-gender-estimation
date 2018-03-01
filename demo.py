@@ -6,7 +6,7 @@ import argparse
 from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
 
-pretrained_model = "https://www.dropbox.com/s/rf8hgoev8uqjv3z/weights.18-4.06.hdf5?dl=1"
+pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.18-4.06.hdf5"
 modhash = '89f56a39a78454e96379348bddd78c0d'
 
 
