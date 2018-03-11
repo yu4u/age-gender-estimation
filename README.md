@@ -159,6 +159,15 @@ Trained on imdb, tested on wiki.
 ![](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
 
 
+## For further improvement
+If you want better results, there would be several options:
+
+- Use larger training images (e.g. --img_size 128).
+- Use VGGFace as an initial model and finetune it (https://github.com/rcmalli/keras-vggface).
+  - In this case, the size of training images should be ()224, 224).
+- Use more "clean" dataset (http://chalearnlap.cvc.uab.es/dataset/18/description/) (only for age estimation)
+
+
 ## References
 [1] R. Rothe, R. Timofte, and L. V. Gool, "DEX: Deep EXpectation of apparent age from a single image," ICCV, 2015.
 
