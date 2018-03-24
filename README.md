@@ -168,7 +168,7 @@ If you want better results, there would be several options:
 - Use more "clean" dataset (http://chalearnlap.cvc.uab.es/dataset/18/description/) (only for age estimation)
 
 
-### License
+## License
 This project is released under the MIT license.
 However, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) used in this project is originally provided under the following conditions.
 
