@@ -133,9 +133,11 @@ class WideResNet:
         pool = AveragePooling2D(pool_size=(8, 8), strides=(1, 1), padding="same")(relu)
         flatten = Flatten()(pool)
         predictions_g = Dense(units=2, kernel_initializer=self._weight_init, use_bias=self._use_bias,
-                              kernel_regularizer=l2(self._weight_decay), activation="softmax")(flatten)
+                              kernel_regularizer=l2(self._weight_decay), activation="softmax",
+                              name="pred_gender")(flatten)
         predictions_a = Dense(units=101, kernel_initializer=self._weight_init, use_bias=self._use_bias,
-                              kernel_regularizer=l2(self._weight_decay), activation="softmax")(flatten)
+                              kernel_regularizer=l2(self._weight_decay), activation="softmax",
+                              name="pred_age")(flatten)
 
         model = Model(inputs=inputs, outputs=[predictions_g, predictions_a])
 
