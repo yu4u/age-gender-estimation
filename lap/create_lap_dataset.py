@@ -4,7 +4,10 @@ import sys
 import time
 from pathlib import Path
 import zipfile
+import bz2
 import urllib.request
+import dlib
+import cv2
 
 
 zip_names = ["train_1.zip", "train_2.zip", "train_gt.zip", "valid.zip", "valid_gt.zip"]
@@ -16,6 +19,11 @@ urls = ["http://***/train_1.zip",
 gt_pwd = b"***"
 
 dataset_root = Path(__file__).resolve().parent.joinpath("dataset")
+model_root = Path(__file__).resolve().parent.joinpath("model")
+train_image_dir = dataset_root.joinpath("train_images")
+validation_image_dir = dataset_root.joinpath("validation_images")
+train_crop_dir = dataset_root.joinpath("train_crop")
+validation_crop_dir = dataset_root.joinpath("validation_crop")
 
 
 def get_args():
@@ -59,7 +67,28 @@ def download():
 
 
 def crop():
-    pass
+    detector_model_path = model_root.joinpath("mmod_human_face_detector.dat")
+
+    if not detector_model_path.is_file():
+        model_root.mkdir(parents=True, exist_ok=True)  # requires Python 3.5 or above
+        detector_model_url = "http://dlib.net/files/mmod_human_face_detector.dat.bz2"
+        detector_model_bz2 = str(detector_model_path) + ".bz2"
+        print("downloading {}".format(detector_model_path.name))
+        urllib.request.urlretrieve(detector_model_url, detector_model_bz2, reporthook)
+
+        with open(detector_model_bz2, "rb") as source, open(str(detector_model_path), "wb") as dest:
+            dest.write(bz2.decompress(source.read()))
+
+    detector = dlib.cnn_face_detection_model_v1(str(detector_model_path))
+
+    for image_dir, crop_dir in [[train_image_dir, train_crop_dir], [validation_image_dir, validation_crop_dir]]:
+        for image_path in image_dir.glob("*.jpg"):
+            frame = cv2.imread(str(image_path))
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            dets = detector(frame_rgb, 1)
+
+            if len(dets) != 1:
+                print("{} faces were detected for {}".format(len(dets), image_path.name))
 
 
 def extract():
@@ -73,9 +102,9 @@ def extract():
         with zipfile.ZipFile(str(zip_path), "r") as f:
 
             if zip_name in ["train_1.zip", "train_2.zip"]:
-                extract_path = dataset_root.joinpath("train_images")
+                extract_path = train_image_dir
             elif zip_name == "valid.zip":
-                extract_path = dataset_root.joinpath("validation_images")
+                extract_path = validation_image_dir
             else:
                 extract_path = dataset_root
 
