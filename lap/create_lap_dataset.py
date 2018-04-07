@@ -84,11 +84,16 @@ def crop():
     for image_dir, crop_dir in [[train_image_dir, train_crop_dir], [validation_image_dir, validation_crop_dir]]:
         for image_path in image_dir.glob("*.jpg"):
             frame = cv2.imread(str(image_path))
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img_h, img_w, _ = frame.shape
+            factor = 800 / max(img_h, img_w)
+            frame_resized = cv2.resize(frame, None, fx=factor, fy=factor)
+            frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
             dets = detector(frame_rgb, 1)
 
             if len(dets) != 1:
                 print("{} faces were detected for {}".format(len(dets), image_path.name))
+                rects = [[d.rect.left(), d.rect.right(), d.rect.top(), d.rect.bottom()] for d in dets]
+                print(rects)
 
 
 def extract():
