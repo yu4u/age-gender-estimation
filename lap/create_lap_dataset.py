@@ -30,6 +30,8 @@ def get_args():
 
 
 def download():
+    dataset_root.mkdir(parents=True, exist_ok=True)  # requires Python 3.5 or above
+
     for zip_name, url in zip(zip_names, urls):
         local_path = dataset_root.joinpath(zip_name)
         urllib.request.urlretrieve(url, str(local_path))
