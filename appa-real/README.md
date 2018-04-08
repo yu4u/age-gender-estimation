@@ -29,3 +29,5 @@ The examples of these images are:
 <img src="ignored_images/002460.jpg" width="320px">
 <img src="ignored_images/002630.jpg" width="320px">
 <img src="ignored_images/002633.jpg" width="320px">
+
+Please refer to [check_ignore_list.ipynb](check_ignore_list.ipynb) for more examples.
