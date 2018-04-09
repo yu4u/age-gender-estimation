@@ -14,6 +14,19 @@ wget http://158.109.8.102/AppaRealAge/appa-real-release.zip
 unzip appa-real-release.zip
 ```
 
+After that, the directory tree becomes like this:
+
+```
+age-gender-estimation
+├── appa-real
+│   ├── appa-real-release
+│   │   ├── test
+│   │   ├── train
+│   │   └── valid
+│   └── ignored_images
+...
+```
+
 ## Ignored List
 The dataset includes cropped and rotated face images with a 40% margin obtained from a face detector.
 
