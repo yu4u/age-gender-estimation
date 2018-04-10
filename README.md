@@ -2,6 +2,8 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
+- [Apr. 10, 2018] Evaluation result on the APPA-REAL dataset was added.
+
 ## Dependencies
 - Python3.5+
 - Keras2.0+
@@ -145,26 +147,54 @@ The best val_loss was improved from 3.969 to 3.731:
 We can see that, with data augmentation,
 overfitting did not occur even at very small learning rates (epoch > 15).
 
-
-## Network architecture
+#### Network architecture
 In [the original paper](https://www.vision.ee.ethz.ch/en/publications/papers/articles/eth_biwi_01299.pdf) [1, 2], the pretrained VGG network is adopted.
 Here the Wide Residual Network (WideResNet) is trained from scratch.
 I modified the @asmith26's implementation of the WideResNet; two classification layers (for age and gender estimation) are added on the top of the WideResNet.
 
 Note that while age and gender are independently estimated by different two CNNs in [1, 2], in my implementation, they are simultaneously estimated using a single CNN.
 
-
-## Results
+#### Estimated results
 Trained on imdb, tested on wiki.
 ![](https://github.com/yu4u/age-gender-estimation/wiki/images/result.png)
 
+
+### Evaluation
+
+#### Evaluation on the APPA-REAL dataset
+You can evaluate a trained model on the APPA-REAL (validation) dataset by:
+
+```bash
+python3 evaluate_appa_real.py
+```
+
+Please refer to [here](appa-real) for the details of the APPA-REAL dataset.
+
+The results of pretrained model is:
+
+```
+MAE Apparent: 6.06
+MAE Real: 7.38
+```
+
+The best result reported in [5] is:
+
+```
+MAE Apparent: 4.08
+MAE Real: 5.30
+```
+
+Please note that the above result was achieved by finetuning the model using the training set of the APPA-REAL dataset,
+while the pretrained model here is not and the size of images is small (64 vs. 224).
+
+Anyway, I should do finetuning on the training set of the APPA-REAL...
 
 ## For further improvement
 If you want better results, there would be several options:
 
 - Use larger training images (e.g. --img_size 128).
 - Use VGGFace as an initial model and finetune it (https://github.com/rcmalli/keras-vggface).
-  - In this case, the size of training images should be ()224, 224).
+  - In this case, the size of training images should be (224, 224).
 - Use more "clean" dataset (http://chalearnlap.cvc.uab.es/dataset/18/description/) (only for age estimation)
 
 
@@ -178,11 +208,13 @@ Therefore, the pretrained model(s) included in this repository is restricted by 
 
 
 ## References
-[1] R. Rothe, R. Timofte, and L. V. Gool, "DEX: Deep EXpectation of apparent age from a single image," ICCV, 2015.
+[1] R. Rothe, R. Timofte, and L. V. Gool, "DEX: Deep EXpectation of apparent age from a single image," in Proc. of ICCV, 2015.
 
 [2] R. Rothe, R. Timofte, and L. V. Gool, "Deep expectation of real and apparent age from a single image
-without facial landmarks," IJCV, 2016.
+without facial landmarks," in IJCV, 2016.
 
 [3] H. Zhang, M. Cisse, Y. N. Dauphin, and D. Lopez-Paz, "mixup: Beyond Empirical Risk Minimization," in arXiv:1710.09412, 2017.
 
 [4] Z. Zhong, L. Zheng, G. Kang, S. Li, and Y. Yang, "Random Erasing Data Augmentation," in arXiv:1708.04896, 2017.
+
+[5] E. Agustsson, R. Timofte, S. Escalera, X. Baro, I. Guyon, and R. Rothe, "Apparent and real age estimation in still images with deep residual regressors on APPA-REAL database," in Proc. of FG, 2017.
