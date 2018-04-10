@@ -1,11 +1,9 @@
 import os
 import cv2
-import dlib
 import numpy as np
 import pandas as pd
 import argparse
 from pathlib import Path
-from contextlib import contextmanager
 from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
 
@@ -64,12 +62,15 @@ def main():
 
     name2age = {image_names[i]: ages[i] for i in range(len(image_names))}
     df = pd.read_csv(str(gt_valid_path))
-    acc_abs_error = 0.0
+    appa_abs_error = 0.0
+    real_abs_error = 0.0
 
     for i, row in df.iterrows():
-        acc_abs_error += abs(name2age[row.file_name] - row.apparent_age_avg)
+        appa_abs_error += abs(name2age[row.file_name] - row.apparent_age_avg)
+        real_abs_error += abs(name2age[row.file_name] - row.real_age)
 
-    print(acc_abs_error / len(image_names))
+    print("MAE Apparent: {}".format(appa_abs_error / len(image_names)))
+    print("MAE Real: {}".format(real_abs_error / len(image_names)))
 
 
 if __name__ == '__main__':
