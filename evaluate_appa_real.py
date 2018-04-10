@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import argparse
+from tqdm import tqdm
 from pathlib import Path
 from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
@@ -49,7 +50,7 @@ def main():
     ages = []
     image_names = []
 
-    for i, image_path in enumerate(image_paths):
+    for i, image_path in tqdm(enumerate(image_paths)):
         faces[i % batch_size] = cv2.resize(cv2.imread(str(image_path), 1), (img_size, img_size))
         image_names.append(image_path.name[:-9])
 
