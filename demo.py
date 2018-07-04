@@ -21,6 +21,8 @@ def get_args():
                         help="depth of network")
     parser.add_argument("--width", type=int, default=8,
                         help="width of network")
+    parser.add_argument("--margin", type=float, default=0.4,
+                        help="width of network")
     args = parser.parse_args()
     return args
 
@@ -63,6 +65,7 @@ def main():
     depth = args.depth
     k = args.width
     weight_file = args.weight_file
+    margin = args.margin
 
     if not weight_file:
         weight_file = get_file("weights.18-4.06.hdf5", pretrained_model, cache_subdir="pretrained_models",
@@ -87,10 +90,10 @@ def main():
         if len(detected) > 0:
             for i, d in enumerate(detected):
                 x1, y1, x2, y2, w, h = d.left(), d.top(), d.right() + 1, d.bottom() + 1, d.width(), d.height()
-                xw1 = max(int(x1 - 0.4 * w), 0)
-                yw1 = max(int(y1 - 0.4 * h), 0)
-                xw2 = min(int(x2 + 0.4 * w), img_w - 1)
-                yw2 = min(int(y2 + 0.4 * h), img_h - 1)
+                xw1 = max(int(x1 - margin * w), 0)
+                yw1 = max(int(y1 - margin * h), 0)
+                xw2 = min(int(x2 + margin * w), img_w - 1)
+                yw2 = min(int(y2 + margin * h), img_h - 1)
                 cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
                 # cv2.rectangle(img, (xw1, yw1), (xw2, yw2), (255, 0, 0), 2)
                 faces[i, :, :, :] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
