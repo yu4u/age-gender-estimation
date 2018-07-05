@@ -1,4 +1,6 @@
 import argparse
+from pathlib import Path
+from tqdm import tqdm
 import pandas as pd
 import cv2
 import dlib
@@ -17,12 +19,12 @@ def get_args():
 
 def main():
     args = get_args()
-    root_dir = args.input
+    root_dir = Path(args.input)
     output_path = args.output
     detector = dlib.get_frontal_face_detector()
     results = []
 
-    for image_path in root_dir.glob("*/*.jpg"):
+    for image_path in tqdm(root_dir.glob("*/*.jpg")):
         img = cv2.imread(str(image_path))
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         detected = detector(input_img, 1)
