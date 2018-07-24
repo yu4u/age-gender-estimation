@@ -81,6 +81,8 @@ Please set the margin argument to 0 for tight cropping:
 python3 demo.py --weight_file WEIGHT_FILE --margin 0
 ```
 
+The pre-trained weights can be found [here](https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.29-3.76_utk.hdf5).
+
 ### Train network
 Train the network using the training data created above.
 
