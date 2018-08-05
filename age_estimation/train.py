@@ -66,7 +66,7 @@ def main():
                                  monitor="val_age_mae",
                                  verbose=1,
                                  save_best_only=True,
-                                 mode=min")
+                                 mode="min")
                  ]
 
     hist = model.fit_generator(generator=train_gen,
