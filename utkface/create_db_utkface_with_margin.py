@@ -62,7 +62,7 @@ def main():
         print(image_name, x1, y1, x2, y2)
 
         cropped_img = imcrop(img, xw1, yw1, xw2, yw2)
-        cv2.imwrite(str(output_dir.joinpath(input_img)), cropped_img)
+        cv2.imwrite(str(output_dir.joinpath(image_name)), cropped_img)
 
 
 if __name__ == '__main__':
