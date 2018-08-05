@@ -1,10 +1,9 @@
-import argparse
 import better_exceptions
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import cv2
-from keras.utils import Sequence
+from keras.utils import Sequence, to_categorical
 
 
 class FaceGenerator(Sequence):
@@ -37,7 +36,7 @@ class FaceGenerator(Sequence):
             x[i] = cv2.resize(image, (image_size, image_size))
             y[i] = age
 
-        return x, y
+        return x, to_categorical(y, 101)
 
     def on_epoch_end(self):
         self.indices = np.random.permutation(self.image_num)
@@ -49,7 +48,7 @@ class FaceGenerator(Sequence):
         df = pd.read_csv(str(gt_train_path))
 
         for i, row in df.iterrows():
-            age = int(row.apparent_age_avg)
+            age = min(100, int(row.apparent_age_avg))
             # age = int(row.real_age)
             image_path = train_image_dir.joinpath(row.file_name + "_face.jpg")
 
@@ -61,7 +60,7 @@ class FaceGenerator(Sequence):
 
         for image_path in image_dir.glob("*.jpg"):
             image_name = image_path.name  # [age]_[gender]_[race]_[date&time].jpg
-            age = int(image_name.split("_")[0])
+            age = min(100, int(image_name.split("_")[0]))
 
             if image_path.is_file():
                 self.image_path_and_age.append([str(image_path), age])
@@ -90,7 +89,7 @@ class ValGenerator(Sequence):
             x[i] = cv2.resize(image, (image_size, image_size))
             y[i] = age
 
-        return x, y
+        return x, to_categorical(y, 101)
 
     def _load_appa(self, appa_dir):
         appa_root = Path(appa_dir)
@@ -99,7 +98,7 @@ class ValGenerator(Sequence):
         df = pd.read_csv(str(gt_val_path))
 
         for i, row in df.iterrows():
-            age = int(row.apparent_age_avg)
+            age = min(100, int(row.apparent_age_avg))
             # age = int(row.real_age)
             image_path = val_image_dir.joinpath(row.file_name + "_face.jpg")
 
