@@ -2,6 +2,14 @@ import better_exceptions
 from keras.applications import ResNet50, InceptionResNetV2
 from keras.layers import Dense
 from keras.models import Model
+from keras import backend as K
+
+
+def age_mae(y_true, y_pred):
+    true_age = K.mean(y_true * K.arange(0, 101), axis=-1)
+    pred_age = K.mean(y_pred * K.arange(0, 101), axis=-1)
+    mae = K.mean(K.abs(true_age - pred_age))
+    return mae
 
 
 def get_model(model_name="ResNet50"):

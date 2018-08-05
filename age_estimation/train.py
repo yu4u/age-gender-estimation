@@ -4,7 +4,8 @@ import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint
 from keras.optimizers import SGD
 from generator import FaceGenerator, ValGenerator
-from model import get_model
+from model import get_model, age_mae
+
 
 class Schedule:
     def __init__(self, nb_epochs):
@@ -56,17 +57,16 @@ def main():
     val_gen = ValGenerator(appa_dir, batch_size=batch_size, image_size=image_size)
     model = get_model(model_name=model_name)
     sgd = SGD(lr=0.1, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, loss="categorical_crossentropy",
-                  metrics=['accuracy'])
+    model.compile(optimizer=sgd, loss="categorical_crossentropy", metrics=[age_mae])
     model.summary()
     output_dir = Path(__file__).resolve().parent.joinpath(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     callbacks = [LearningRateScheduler(schedule=Schedule(nb_epochs)),
-                 ModelCheckpoint(str(output_dir) + "/weights.{epoch:03d}-{val_loss:.3f}.hdf5",
-                                 monitor="val_loss",
+                 ModelCheckpoint(str(output_dir) + "/weights.{epoch:03d}-{val_loss:.3f}-{val_age_mae:.3f}.hdf5",
+                                 monitor="val_age_mae",
                                  verbose=1,
                                  save_best_only=True,
-                                 mode="auto")
+                                 mode=min")
                  ]
 
     hist = model.fit_generator(generator=train_gen,
