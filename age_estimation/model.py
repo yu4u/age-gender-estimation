@@ -16,11 +16,13 @@ def get_model(model_name="ResNet50"):
                        name="pred_age")(base_model.output_layers[0].output)
 
     model = Model(inputs=base_model.input, outputs=prediction)
-    model.summary()
+
+    return model
 
 
 def main():
-    get_model("InceptionResNetV2")
+    model = get_model("InceptionResNetV2")
+    model.summary()
 
 
 if __name__ == '__main__':
