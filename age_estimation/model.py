@@ -6,8 +6,8 @@ from keras import backend as K
 
 
 def age_mae(y_true, y_pred):
-    true_age = K.mean(y_true * K.arange(0, 101), axis=-1)
-    pred_age = K.mean(y_pred * K.arange(0, 101), axis=-1)
+    true_age = K.sum(y_true * K.arange(0, 101), axis=-1)
+    pred_age = K.sum(y_pred * K.arange(0, 101), axis=-1)
     mae = K.mean(K.abs(true_age - pred_age))
     return mae
 
