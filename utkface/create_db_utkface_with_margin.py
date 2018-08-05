@@ -1,7 +1,6 @@
 import argparse
 from pathlib import Path
 from tqdm import tqdm
-import pandas as pd
 import cv2
 import dlib
 
@@ -19,6 +18,8 @@ def get_args():
     return args
 
 
+# robust image cropping from
+# https://stackoverflow.com/questions/15589517/how-to-crop-an-image-in-opencv-using-python
 def imcrop(img, x1, y1, x2, y2):
     if x1 < 0 or y1 < 0 or x2 > img.shape[1] or y2 > img.shape[0]:
         img, x1, x2, y1, y2 = pad_img_to_fit_bbox(img, x1, x2, y1, y2)
@@ -57,10 +58,7 @@ def main():
         yw1 = int(y1 - margin * h)
         xw2 = int(x2 + margin * w)
         yw2 = int(y2 + margin * h)
-
         image_name = image_path.name
-        print(image_name, x1, y1, x2, y2)
-
         cropped_img = imcrop(img, xw1, yw1, xw2, yw2)
         cv2.imwrite(str(output_dir.joinpath(image_name)), cropped_img)
 
