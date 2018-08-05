@@ -30,7 +30,7 @@ class FaceGenerator(Sequence):
 
         sample_indices = self.indices[idx * batch_size:(idx + 1) * batch_size]
 
-        for i, sample_id in sample_indices:
+        for i, sample_id in enumerate(sample_indices):
             image_path, age = self.image_path_and_age[sample_id]
             image = cv2.imread(str(image_path))
             x[i] = cv2.resize(image, (image_size, image_size))
