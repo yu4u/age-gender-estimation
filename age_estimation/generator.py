@@ -13,7 +13,7 @@ def get_transform_func():
     p = Augmentor.Pipeline()
     p.flip_left_right(probability=0.5)
     p.rotate(probability=1, max_left_rotation=5, max_right_rotation=5)
-    p.zoom_random(probability=1, percentage_area=0.95, randomise_percentage_area=True)
+    p.zoom_random(probability=1, percentage_area=0.95)
 
     def transform_image(image):
         image = [Image.fromarray(image)]
