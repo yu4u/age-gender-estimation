@@ -1,9 +1,28 @@
 import better_exceptions
+import random
 from pathlib import Path
+from PIL import Image
 import numpy as np
 import pandas as pd
 import cv2
 from keras.utils import Sequence, to_categorical
+import Augmentor
+
+
+def get_transform_func():
+    p = Augmentor.Pipeline()
+    p.flip_left_right(probability=0.5)
+    p.rotate(probability=1, max_left_rotation=5, max_right_rotation=5)
+    p.crop_random(probability=1, percentage_area=0.95)
+
+    def transform_image(image):
+        image = [Image.fromarray(image)]
+        for operation in p.operations:
+            r = round(random.uniform(0, 1), 1)
+            if r <= operation.probability:
+                image = operation.perform_operation(image)
+        return image[0]
+    return transform_image
 
 
 class FaceGenerator(Sequence):
@@ -18,6 +37,7 @@ class FaceGenerator(Sequence):
         self.batch_size = batch_size
         self.image_size = image_size
         self.indices = np.random.permutation(self.image_num)
+        self.transform_image = get_transform_func()
 
     def __len__(self):
         return self.image_num // self.batch_size
@@ -33,7 +53,7 @@ class FaceGenerator(Sequence):
         for i, sample_id in enumerate(sample_indices):
             image_path, age = self.image_path_and_age[sample_id]
             image = cv2.imread(str(image_path))
-            x[i] = cv2.resize(image, (image_size, image_size))
+            x[i] = self.transform_image(cv2.resize(image, (image_size, image_size)))
             y[i] = age
 
         return x, to_categorical(y, 101)
