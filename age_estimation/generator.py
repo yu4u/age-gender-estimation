@@ -18,6 +18,7 @@ def get_transform_func():
     p.random_color(probability=1, min_factor=0.8, max_factor=1.2)
     p.random_contrast(probability=1, min_factor=0.8, max_factor=1.2)
     p.random_brightness(probability=1, min_factor=0.8, max_factor=1.2)
+    p.random_erasing(probability=0.5, rectangle_area=0.2)
 
     def transform_image(image):
         image = [Image.fromarray(image)]
