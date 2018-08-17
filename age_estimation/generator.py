@@ -106,7 +106,7 @@ class ValGenerator(Sequence):
         batch_size = self.batch_size
         image_size = self.image_size
         x = np.zeros((batch_size, image_size, image_size, 3), dtype=np.uint8)
-        y = np.zeros((batch_size, 101), dtype=np.int32)
+        y = np.zeros((batch_size, 1), dtype=np.int32)
 
         for i in range(batch_size):
             image_path, age = self.image_path_and_age[idx * batch_size + i]
