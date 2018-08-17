@@ -114,7 +114,7 @@ class ValGenerator(Sequence):
             x[i] = cv2.resize(image, (image_size, image_size))
             y[i] = age
 
-        return x, to_categorical(y)
+        return x, to_categorical(y, num_classes=101)
 
     def _load_appa(self, appa_dir):
         appa_root = Path(appa_dir)
