@@ -51,7 +51,7 @@ class FaceGenerator(Sequence):
         batch_size = self.batch_size
         image_size = self.image_size
         x = np.zeros((batch_size, image_size, image_size, 3), dtype=np.uint8)
-        y = np.zeros((batch_size, 1), dtype=np.int32)
+        y = np.zeros((batch_size, 101), dtype=np.int32)
 
         sample_indices = self.indices[idx * batch_size:(idx + 1) * batch_size]
 
@@ -59,7 +59,7 @@ class FaceGenerator(Sequence):
             image_path, age = self.image_path_and_age[sample_id]
             image = cv2.imread(str(image_path))
             x[i] = self.transform_image(cv2.resize(image, (image_size, image_size)))
-            y[i] = np.abs(np.array(range(101)) - age)
+            y[i] = np.abs(np.array(range(101), dtype=np.int32) - age)
 
         return x, y
 
@@ -106,15 +106,15 @@ class ValGenerator(Sequence):
         batch_size = self.batch_size
         image_size = self.image_size
         x = np.zeros((batch_size, image_size, image_size, 3), dtype=np.uint8)
-        y = np.zeros((batch_size, 1), dtype=np.int32)
+        y = np.zeros((batch_size, 101), dtype=np.int32)
 
         for i in range(batch_size):
             image_path, age = self.image_path_and_age[idx * batch_size + i]
             image = cv2.imread(str(image_path))
             x[i] = cv2.resize(image, (image_size, image_size))
-            y[i] = np.abs(np.array(range(101)) - age)
+            y[i] = np.abs(np.array(range(101), dtype=np.int32) - age)
 
-        return x, to_categorical(y, 101)
+        return x, y
 
     def _load_appa(self, appa_dir):
         appa_root = Path(appa_dir)
