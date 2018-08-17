@@ -112,9 +112,9 @@ class ValGenerator(Sequence):
             image_path, age = self.image_path_and_age[idx * batch_size + i]
             image = cv2.imread(str(image_path))
             x[i] = cv2.resize(image, (image_size, image_size))
-            y[i] = np.abs(np.array(range(101), dtype=np.int32) - age)
+            y[i] = age
 
-        return x, y
+        return x, to_categorical(y)
 
     def _load_appa(self, appa_dir):
         appa_root = Path(appa_dir)
