@@ -12,6 +12,10 @@ def age_mae(y_true, y_pred):
     return mae
 
 
+def mae_loss(y_true, y_pred):
+    return K.sum(y_true * y_pred)
+
+
 def get_model(model_name="ResNet50"):
     base_model = None
 

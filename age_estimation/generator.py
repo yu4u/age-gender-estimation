@@ -59,9 +59,9 @@ class FaceGenerator(Sequence):
             image_path, age = self.image_path_and_age[sample_id]
             image = cv2.imread(str(image_path))
             x[i] = self.transform_image(cv2.resize(image, (image_size, image_size)))
-            y[i] = age
+            y[i] = np.abs(np.array(range(101)) - age)
 
-        return x, to_categorical(y, 101)
+        return x, y
 
     def on_epoch_end(self):
         self.indices = np.random.permutation(self.image_num)
@@ -112,7 +112,7 @@ class ValGenerator(Sequence):
             image_path, age = self.image_path_and_age[idx * batch_size + i]
             image = cv2.imread(str(image_path))
             x[i] = cv2.resize(image, (image_size, image_size))
-            y[i] = age
+            y[i] = np.abs(np.array(range(101)) - age)
 
         return x, to_categorical(y, 101)
 

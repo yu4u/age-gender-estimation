@@ -4,7 +4,7 @@ import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint
 from keras.optimizers import SGD
 from generator import FaceGenerator, ValGenerator
-from model import get_model, age_mae
+from model import get_model, age_mae, mae_loss
 
 
 def get_args():
@@ -61,7 +61,7 @@ def main():
     val_gen = ValGenerator(appa_dir, batch_size=batch_size, image_size=image_size)
     model = get_model(model_name=model_name)
     sgd = SGD(lr=0.1, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, loss="categorical_crossentropy", metrics=[age_mae])
+    model.compile(optimizer=sgd, loss=mae_loss, metrics=[age_mae])
     model.summary()
     output_dir = Path(__file__).resolve().parent.joinpath(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
