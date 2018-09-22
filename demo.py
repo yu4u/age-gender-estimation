@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import cv2
 import dlib
 import numpy as np
@@ -69,7 +69,7 @@ def main():
 
     if not weight_file:
         weight_file = get_file("weights.28-3.73.hdf5", pretrained_model, cache_subdir="pretrained_models",
-                               file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
+                               file_hash=modhash, cache_dir=Path(__file__).resolve().parent)
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
@@ -113,7 +113,7 @@ def main():
         cv2.imshow("result", img)
         key = cv2.waitKey(30)
 
-        if key == 27:
+        if key == 27:  # ESC
             break
 
 
