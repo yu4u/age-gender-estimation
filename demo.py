@@ -23,6 +23,8 @@ def get_args():
                         help="width of network")
     parser.add_argument("--margin", type=float, default=0.4,
                         help="width of network")
+    parser.add_argument("--image_dir", type=str, default=None,
+                        help="target image directory; if set, images in image_dir are used instead of webcam")
     args = parser.parse_args()
     return args
 
@@ -60,12 +62,25 @@ def yield_images():
             yield img
 
 
+def yield_images_from_dir(image_dir):
+    image_dir = Path(image_dir)
+
+    for image_path in image_dir.glob("*.*"):
+        img = cv2.imread(str(image_path), 1)
+
+        if img is not None:
+            h, w, _ = img.shape
+            r = 640 / max(w, h)
+            yield cv2.resize(img, (int(w * r), int(h * r)))
+
+
 def main():
     args = get_args()
     depth = args.depth
     k = args.width
     weight_file = args.weight_file
     margin = args.margin
+    image_dir = args.image_dir
 
     if not weight_file:
         weight_file = get_file("weights.28-3.73.hdf5", pretrained_model, cache_subdir="pretrained_models",
@@ -79,7 +94,9 @@ def main():
     model = WideResNet(img_size, depth=depth, k=k)()
     model.load_weights(weight_file)
 
-    for img in yield_images():
+    image_generator = yield_images_from_dir(image_dir) if image_dir else yield_images()
+
+    for img in image_generator:
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
 
@@ -111,7 +128,7 @@ def main():
                 draw_label(img, (d.left(), d.top()), label)
 
         cv2.imshow("result", img)
-        key = cv2.waitKey(30)
+        key = cv2.waitKey(-1) if image_dir else cv2.waitKey(30)
 
         if key == 27:  # ESC
             break

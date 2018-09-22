@@ -2,6 +2,7 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
+- [Sep. 23, 2018] Demo from directory
 - [Aug. 11, 2018] Add age estimation sub-project [here](age_estimation)
 - [Jul. 5, 2018] The UTKFace dataset became available for training.
 - [Apr. 10, 2018] Evaluation result on the APPA-REAL dataset was added.
@@ -22,7 +23,8 @@ Tested on:
 ## Usage
 
 ### Use pretrained model for demo
-Run demo the script (requires web cam)
+Run the demo script (requires web cam).
+You can use `--image_dir [IMAGE_DIR]` option to use images in the `[IMAGE_DIR]` directory instead.
 
 ```sh
 python3 demo.py
@@ -137,17 +139,23 @@ python3 demo.py
 ```
 
 ```sh
-usage: demo.py [-h] [--weight_file WEIGHT_FILE] [--depth DEPTH] [--width WIDTH]
+usage: demo.py [-h] [--weight_file WEIGHT_FILE] [--depth DEPTH]
+               [--width WIDTH] [--margin MARGIN] [--image_dir IMAGE_DIR]
 
 This script detects faces from web cam input, and estimates age and gender for
 the detected faces.
 
 optional arguments:
-  -h, --help                show this help message and exit
-  --weight_file WEIGHT_FILE path to weight file (e.g. weights.18-4.06.hdf5) (default: None)
-  --depth DEPTH             depth of network (default: 16)
-  --width WIDTH             width of network (default: 8)
-
+  -h, --help            show this help message and exit
+  --weight_file WEIGHT_FILE
+                        path to weight file (e.g. weights.28-3.73.hdf5)
+                        (default: None)
+  --depth DEPTH         depth of network (default: 16)
+  --width WIDTH         width of network (default: 8)
+  --margin MARGIN       width of network (default: 0.4)
+  --image_dir IMAGE_DIR
+                        target image directory; if set, images in image_dir
+                        are used instead of webcam (default: None)
 ```
 
 Please use the best model among `checkpoints/weights.*.hdf5` for `WEIGHT_FILE` if you use your own trained models.
