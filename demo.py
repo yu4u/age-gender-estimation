@@ -22,7 +22,7 @@ def get_args():
     parser.add_argument("--width", type=int, default=8,
                         help="width of network")
     parser.add_argument("--margin", type=float, default=0.4,
-                        help="width of network")
+                        help="margin around detected face for age-gender estimation")
     parser.add_argument("--image_dir", type=str, default=None,
                         help="target image directory; if set, images in image_dir are used instead of webcam")
     args = parser.parse_args()
