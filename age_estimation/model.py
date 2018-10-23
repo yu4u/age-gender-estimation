@@ -21,7 +21,7 @@ def get_model(model_name="ResNet50"):
         base_model = InceptionResNetV2(include_top=False, weights='imagenet', input_shape=(299, 299, 3), pooling="avg")
 
     prediction = Dense(units=101, kernel_initializer="he_normal", use_bias=False, activation="softmax",
-                       name="pred_age")(base_model.output_layers[0].output)
+                       name="pred_age")(base_model.output)
 
     model = Model(inputs=base_model.input, outputs=prediction)
 
