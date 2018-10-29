@@ -99,6 +99,7 @@ Trained weight files are stored as `checkpoints/weights.*.hdf5` for each epoch i
 usage: train.py [-h] --input INPUT [--batch_size BATCH_SIZE]
                 [--nb_epochs NB_EPOCHS] [--depth DEPTH] [--width WIDTH]
                 [--validation_split VALIDATION_SPLIT] [--aug]
+                [--output_path OUTPUT_PATH]
 
 This script trains the CNN model for age and gender estimation.
 
@@ -116,6 +117,8 @@ optional arguments:
   --validation_split VALIDATION_SPLIT
                         validation split ratio (default: 0.1)
   --aug                 use data augmentation if set true (default: False)
+  --output_path OUTPUT_PATH
+                        checkpoint dir (default: checkpoints)
 ```
 
 ### Train network with recent data augmentation methods
