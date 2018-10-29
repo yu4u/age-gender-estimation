@@ -1,13 +1,13 @@
 import pandas as pd
 import logging
 import argparse
-import os
+from pathlib import Path
 import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint
 from keras.optimizers import SGD
 from keras.utils import np_utils
 from wide_resnet import WideResNet
-from utils import mk_dir, load_data
+from utils import load_data
 from keras.preprocessing.image import ImageDataGenerator
 from mixup_generator import MixupGenerator
 from random_eraser import get_random_eraser
@@ -46,6 +46,8 @@ def get_args():
                         help="validation split ratio")
     parser.add_argument("--aug", action="store_true",
                         help="use data augmentation if set true")
+    parser.add_argument("--output_path", type=str, default="checkpoints",
+                        help="checkpoint dir")
     args = parser.parse_args()
     return args
 
@@ -59,6 +61,8 @@ def main():
     k = args.width
     validation_split = args.validation_split
     use_augmentation = args.aug
+    output_path = Path(__file__).resolve().parent.joinpath(args.output_path)
+    output_path.mkdir(parents=True, exist_ok=True)
 
     logging.debug("Loading data...")
     image, gender, age, _, image_size, _ = load_data(input_path)
@@ -75,14 +79,8 @@ def main():
     model.count_params()
     model.summary()
 
-    logging.debug("Saving model...")
-    mk_dir("models")
-    with open(os.path.join("models", "WRN_{}_{}.json".format(depth, k)), "w") as f:
-        f.write(model.to_json())
-
-    mk_dir("checkpoints")
     callbacks = [LearningRateScheduler(schedule=Schedule(nb_epochs)),
-                 ModelCheckpoint("checkpoints/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
+                 ModelCheckpoint(str(output_path) + "/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
                                  monitor="val_loss",
                                  verbose=1,
                                  save_best_only=True,
@@ -122,9 +120,8 @@ def main():
         hist = model.fit(X_train, [y_train_g, y_train_a], batch_size=batch_size, epochs=nb_epochs, callbacks=callbacks,
                          validation_data=(X_test, [y_test_g, y_test_a]))
 
-    logging.debug("Saving weights...")
-    model.save_weights(os.path.join("models", "WRN_{}_{}.h5".format(depth, k)), overwrite=True)
-    pd.DataFrame(hist.history).to_hdf(os.path.join("models", "history_{}_{}.h5".format(depth, k)), "history")
+    logging.debug("Saving history...")
+    pd.DataFrame(hist.history).to_hdf(output_path.joinpath("history_{}_{}.h5".format(depth, k)), "history")
 
 
 if __name__ == '__main__':
