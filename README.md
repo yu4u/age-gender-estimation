@@ -2,6 +2,7 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
+- [Nov. 12, 2018] Enable Adam optimizer; seems to be better than momentum SGD
 - [Sep. 23, 2018] Demo from directory
 - [Aug. 11, 2018] Add age estimation sub-project [here](age_estimation)
 - [Jul. 5, 2018] The UTKFace dataset became available for training.
@@ -97,8 +98,8 @@ Trained weight files are stored as `checkpoints/weights.*.hdf5` for each epoch i
 
 ```sh
 usage: train.py [-h] --input INPUT [--batch_size BATCH_SIZE]
-                [--nb_epochs NB_EPOCHS] [--depth DEPTH] [--width WIDTH]
-                [--validation_split VALIDATION_SPLIT] [--aug]
+                [--nb_epochs NB_EPOCHS] [--lr LR] [--opt OPT] [--depth DEPTH]
+                [--width WIDTH] [--validation_split VALIDATION_SPLIT] [--aug]
                 [--output_path OUTPUT_PATH]
 
 This script trains the CNN model for age and gender estimation.
@@ -111,6 +112,8 @@ optional arguments:
                         batch size (default: 32)
   --nb_epochs NB_EPOCHS
                         number of epochs (default: 30)
+  --lr LR               initial learning rate (default: 0.1)
+  --opt OPT             optimizer name; 'sgd' or 'adam' (default: sgd)
   --depth DEPTH         depth of network (should be 10, 16, 22, 28, ...)
                         (default: 16)
   --width WIDTH         width of network (default: 8)
