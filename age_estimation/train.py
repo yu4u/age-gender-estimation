@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adam
 from generator import FaceGenerator, ValGenerator
 from model import get_model, age_mae
 
@@ -22,6 +22,8 @@ def get_args():
                         help="number of epochs")
     parser.add_argument("--lr", type=float, default=0.1,
                         help="learning rate")
+    parser.add_argument("--opt", type=str, default="sgd",
+                        help="optimizer name; 'sgd' or 'adam'")
     parser.add_argument("--model_name", type=str, default="ResNet50",
                         help="model name: 'ResNet50' or 'InceptionResNetV2'")
     args = parser.parse_args()
@@ -43,6 +45,15 @@ class Schedule:
         return self.initial_lr * 0.008
 
 
+def get_optimizer(opt_name, lr):
+    if opt_name == "sgd":
+        return SGD(lr=lr, momentum=0.9, nesterov=True)
+    elif opt_name == "adam":
+        return Adam(lr=lr)
+    else:
+        raise ValueError("optimizer name should be 'sgd' or 'adam'")
+
+
 def main():
     args = get_args()
     appa_dir = args.appa_dir
@@ -51,6 +62,7 @@ def main():
     batch_size = args.batch_size
     nb_epochs = args.nb_epochs
     lr = args.lr
+    opt_name = args.opt
 
     if model_name == "ResNet50":
         image_size = 224
@@ -60,8 +72,8 @@ def main():
     train_gen = FaceGenerator(appa_dir, utk_dir=utk_dir, batch_size=batch_size, image_size=image_size)
     val_gen = ValGenerator(appa_dir, batch_size=batch_size, image_size=image_size)
     model = get_model(model_name=model_name)
-    sgd = SGD(lr=0.1, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, loss="categorical_crossentropy", metrics=[age_mae])
+    opt = get_optimizer(opt_name, lr)
+    model.compile(optimizer=opt, loss="categorical_crossentropy", metrics=[age_mae])
     model.summary()
     output_dir = Path(__file__).resolve().parent.joinpath(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
