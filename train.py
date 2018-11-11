@@ -95,7 +95,7 @@ def main():
     model.count_params()
     model.summary()
 
-    callbacks = [LearningRateScheduler(schedule=Schedule(nb_epochs)),
+    callbacks = [LearningRateScheduler(schedule=Schedule(nb_epochs, lr)),
                  ModelCheckpoint(str(output_path) + "/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
                                  monitor="val_loss",
                                  verbose=1,
