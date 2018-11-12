@@ -1,5 +1,6 @@
 import better_exceptions
 import random
+import math
 from pathlib import Path
 from PIL import Image
 import numpy as np
@@ -59,7 +60,8 @@ class FaceGenerator(Sequence):
             image_path, age = self.image_path_and_age[sample_id]
             image = cv2.imread(str(image_path))
             x[i] = self.transform_image(cv2.resize(image, (image_size, image_size)))
-            y[i] = age
+            age += math.floor(np.random.randn() * 2 + 0.5)
+            y[i] = np.clip(age, 0, 100)
 
         return x, to_categorical(y, 101)
 
