@@ -8,8 +8,8 @@ from keras.utils.data_utils import get_file
 from model import get_model
 
 
-pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/age_only_weights.029-4.027-5.250.hdf5"
-modhash = '4e1cb835a204fcb6f82e35e8e01fab33'
+pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/age_only_resnet50_weights.061-3.300-4.410.hdf5"
+modhash = "306e44200d3f632a5dccac153c2966f2"
 
 
 def get_args():
@@ -81,7 +81,7 @@ def main():
     image_dir = args.image_dir
 
     if not weight_file:
-        weight_file = get_file("age_only_weights.029-4.027-5.250.hdf5", pretrained_model,
+        weight_file = get_file("age_only_resnet50_weights.061-3.300-4.410.hdf5", pretrained_model,
                                cache_subdir="pretrained_models",
                                file_hash=modhash, cache_dir=Path(__file__).resolve().parent)
 

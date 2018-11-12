@@ -39,7 +39,8 @@ Options:
 ```bash
 usage: train.py [-h] --appa_dir APPA_DIR [--utk_dir UTK_DIR]
                 [--output_dir OUTPUT_DIR] [--batch_size BATCH_SIZE]
-                [--nb_epochs NB_EPOCHS] [--lr LR] [--model_name MODEL_NAME]
+                [--nb_epochs NB_EPOCHS] [--lr LR] [--opt OPT]
+                [--model_name MODEL_NAME]
 
 This script trains the CNN model for age estimation.
 
@@ -54,6 +55,7 @@ optional arguments:
   --nb_epochs NB_EPOCHS
                         number of epochs (default: 30)
   --lr LR               learning rate (default: 0.1)
+  --opt OPT             optimizer name; 'sgd' or 'adam' (default: sgd)
   --model_name MODEL_NAME
                         model name: 'ResNet50' or 'InceptionResNetV2'
                         (default: ResNet50)
@@ -61,11 +63,16 @@ optional arguments:
 
 ### Result
 
-Currently the best MAE (against apparent age) is 5.250.
+Currently the best MAE (against apparent age) is 4.410.
+This model can be trained by:
+
+```bash
+python3 train.py --appa_dir APPA_DIR --opt adam --lr 0.001 --nb_epochs 100
+```
 
 <img src="result/result.png" width="480px">
 
-weights: https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/age_only_weights.029-4.027-5.250.hdf5
+weights: https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/age_only_resnet50_weights.061-3.300-4.410.hdf5
 
 
 ### Demo
