@@ -124,7 +124,7 @@ def main():
             # draw results
             for i, d in enumerate(detected):
                 label = "{}, {}".format(int(predicted_ages[i]),
-                                        "F" if predicted_genders[i][0] > 0.5 else "M")
+                                        "F" if predicted_genders[i][0] < 0.5 else "M")
                 draw_label(img, (d.left(), d.top()), label)
 
         cv2.imshow("result", img)
