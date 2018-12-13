@@ -4,7 +4,7 @@ import logging
 import sys
 import numpy as np
 from keras.models import Model
-from keras.layers import Input, Activation, add, Dense, Flatten, Dropout
+from keras.layers import Input, Activation, add, Dense, Flatten, Dropout, GlobalAveragePooling2D
 from keras.layers.convolutional import Conv2D, AveragePooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.regularizers import l2
@@ -127,11 +127,10 @@ class WideResNet:
         conv3 = self._layer(block_fn, n_input_plane=n_stages[1], n_output_plane=n_stages[2], count=n, stride=(2, 2))(conv2)
         conv4 = self._layer(block_fn, n_input_plane=n_stages[2], n_output_plane=n_stages[3], count=n, stride=(2, 2))(conv3)
         batch_norm = BatchNormalization(axis=self._channel_axis)(conv4)
-        relu = Activation("relu")(batch_norm)
+        relu = Activation("sigmoid")(batch_norm)
 
         # Classifier block
-        pool = AveragePooling2D(pool_size=(8, 8), strides=(1, 1), padding="same")(relu)
-        flatten = Flatten()(pool)
+        flatten = GlobalAveragePooling2D()(relu)
         predictions_g = Dense(units=2, kernel_initializer=self._weight_init, use_bias=self._use_bias,
                               kernel_regularizer=l2(self._weight_decay), activation="softmax",
                               name="pred_gender")(flatten)
