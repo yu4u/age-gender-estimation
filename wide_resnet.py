@@ -127,10 +127,10 @@ class WideResNet:
         conv3 = self._layer(block_fn, n_input_plane=n_stages[1], n_output_plane=n_stages[2], count=n, stride=(2, 2))(conv2)
         conv4 = self._layer(block_fn, n_input_plane=n_stages[2], n_output_plane=n_stages[3], count=n, stride=(2, 2))(conv3)
         batch_norm = BatchNormalization(axis=self._channel_axis)(conv4)
-        relu = Activation("sigmoid")(batch_norm)
+        act = Activation("sigmoid")(batch_norm)
 
         # Classifier block
-        flatten = GlobalAveragePooling2D()(relu)
+        flatten = GlobalAveragePooling2D()(act)
         predictions_g = Dense(units=2, kernel_initializer=self._weight_init, use_bias=self._use_bias,
                               kernel_regularizer=l2(self._weight_decay), activation="softmax",
                               name="pred_gender")(flatten)
