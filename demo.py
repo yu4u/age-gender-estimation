@@ -84,7 +84,7 @@ def main():
 
     if not weight_file:
         weight_file = get_file("weights.28-3.73.hdf5", pretrained_model, cache_subdir="pretrained_models",
-                               file_hash=modhash, cache_dir=Path(__file__).resolve().parent)
+                               file_hash=modhash, cache_dir=str(Path(__file__).resolve().parent))
 
     # for face detection
     detector = dlib.get_frontal_face_detector()
