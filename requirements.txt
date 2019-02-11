@@ -1,0 +1,8 @@
+opencv-python
+dlib
+imutils
+websockets
+tensorflow
+numpy
+Keras
+py-agender
