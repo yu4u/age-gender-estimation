@@ -1,0 +1,11 @@
+opencv-python
+dlib
+imutils
+tensorflow
+Keras
+scipy
+numpy
+Pandas
+tqdm
+h5py
+tables
