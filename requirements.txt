@@ -1,8 +1,11 @@
 opencv-python
 dlib
 imutils
-websockets
 tensorflow
-numpy
 Keras
-py-agender
+scipy
+numpy
+Pandas
+tqdm
+h5py
+tables
