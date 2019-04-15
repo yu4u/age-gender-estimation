@@ -214,8 +214,8 @@ Please refer to [here](appa-real) for the details of the APPA-REAL dataset.
 The results of pretrained model is:
 
 ```
-MAE Apparent: 6.06
-MAE Real: 7.38
+MAE Apparent: 6.47
+MAE Real: 7.61
 ```
 
 The best result reported in [5] is:

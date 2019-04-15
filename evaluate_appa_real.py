@@ -8,8 +8,8 @@ from pathlib import Path
 from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
 
-pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.18-4.06.hdf5"
-modhash = '89f56a39a78454e96379348bddd78c0d'
+pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
+modhash = "fbe63257a054c1c5466cfd7bf14646d6"
 
 
 def get_args():
@@ -17,7 +17,7 @@ def get_args():
                                                  "using the APPA-REAL validation data.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--weight_file", type=str, default=None,
-                        help="path to weight file (e.g. weights.18-4.06.hdf5)")
+                        help="path to weight file (e.g. weights.28-3.73.hdf5)")
     parser.add_argument("--depth", type=int, default=16,
                         help="depth of network")
     parser.add_argument("--width", type=int, default=8,
@@ -33,7 +33,7 @@ def main():
     weight_file = args.weight_file
 
     if not weight_file:
-        weight_file = get_file("weights.18-4.06.hdf5", pretrained_model, cache_subdir="pretrained_models",
+        weight_file = get_file("weights.28-3.73.hdf5", pretrained_model, cache_subdir="pretrained_models",
                                file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
 
     # load model and weights
