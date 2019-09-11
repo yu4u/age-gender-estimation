@@ -35,9 +35,11 @@ def main():
 
     out_genders = []
     out_ages = []
-    out_imgs = []
+    sample_num = len(face_score)
+    out_imgs = np.empty((sample_num, img_size, img_size, 3), dtype=np.uint8)
+    valid_sample_num = 0
 
-    for i in tqdm(range(len(face_score))):
+    for i in tqdm(range(sample_num)):
         if face_score[i] < min_score:
             continue
 
@@ -53,9 +55,10 @@ def main():
         out_genders.append(int(gender[i]))
         out_ages.append(age[i])
         img = cv2.imread(root_path + str(full_path[i][0]))
-        out_imgs.append(cv2.resize(img, (img_size, img_size)))
+        out_imgs[valid_sample_num] = cv2.resize(img, (img_size, img_size))
+        valid_sample_num += 1
 
-    output = {"image": np.array(out_imgs), "gender": np.array(out_genders), "age": np.array(out_ages),
+    output = {"image": out_imgs[:valid_sample_num], "gender": np.array(out_genders), "age": np.array(out_ages),
               "db": db, "img_size": img_size, "min_score": min_score}
     scipy.io.savemat(output_path, output)
 
