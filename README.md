@@ -159,7 +159,7 @@ optional arguments:
                         (default: None)
   --depth DEPTH         depth of network (default: 16)
   --width WIDTH         width of network (default: 8)
-  --margin MARGIN       width of network (default: 0.4)
+  --margin MARGIN       margin around detected face for age-gender estimation (default: 0.4)
   --image_dir IMAGE_DIR
                         target image directory; if set, images in image_dir
                         are used instead of webcam (default: None)
