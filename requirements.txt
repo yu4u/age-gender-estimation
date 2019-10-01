@@ -9,3 +9,7 @@ Pandas
 tqdm
 h5py
 tables
+uuid
+boto3
+face_recognition
+pandas
