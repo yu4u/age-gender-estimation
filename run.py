@@ -102,7 +102,7 @@ def get_face_embeddings_from_image(image, convert_to_rgb=False):
     return face_locations, face_encodings
 
 def main():
-    global s3,end_demo
+    global s3
     # s3 = boto3.client('s3')
     session = boto3.Session(
 	    aws_access_key_id=AWS_SERVER_PUBLIC_KEY,
@@ -164,56 +164,42 @@ def main():
                 draw_label(img, (d.left(), d.top()), label)
 
 
-     
-            # labels = ["{} {}".format(int(predicted_ages[i]-5),
-            #                             "M" if predicted_genders[i][0] < 0.5 else "F") 
-            # 		for i, d in enumerate(detected)]
-
-
         cv2.imshow("result", img)
         key = cv2.waitKey(-1) if image_dir else cv2.waitKey(30)
 
         if key == 27:  # ESC
-            end_demo = True
             break
 
         if key == 32:  # SPACE
             frame_id = int(time.time())
-            _,embeddings = get_face_embeddings_from_image(img)
+
+            # _,embeddings = get_face_embeddings_from_image(img)
+            # embedded = len(embeddings)==len(detected)
+            # if not embedded:
+            #     embeddings =  [None]*len(detected)
+            #     print('Oops. Please try again!')
+            #     return None
             
-            embedded = len(embeddings)==len(detected)
-            
-            if not embedded:
-                embeddings =  [None]*len(detected)
-                print('Oops. Please try again!')
-                return None
-            xy = [{str(i):{'x':'null','y':'null'} for i in range(64)}]*len(embeddings)
-            for i in range(len(embeddings)):
-            	for k,j in enumerate(embeddings[i]):
-            		coord = int(k/2)
-            		if k%2==0:
-            			xy[i][str(coord)]['x'] = float(j)
-            		else:
-            			xy[i][str(coord)]['y'] = float(j)
 
             response=[[
+                        str(frame_id)+str(i+1).zfill(2),
                         str(pd.to_datetime('now')),
                         str(frame_id),
+                        str(i+1),
                         str(int(predicted_ages[i])-5),
                         "M" if predicted_genders[i][0] < 0.5 else "F"
-                        ,str(embeddings[i])
+                        # ,str(embeddings[i])
                     ] for i, d in enumerate(detected)]            
 
             j_response=[{
+
+                        'key':int(str(frame_id)+str(i+1).zfill(2)),
                         'datetime':str(pd.to_datetime('now')),
                         'frame_id':frame_id,
+                        'frame_face_id':i+1,
                         'predicted_ages':str(int(predicted_ages[i])-5),
-                        'predicted_genders':"M" if predicted_genders[i][0] < 0.5 else "F",
-                        # 'embeddings':dict(zip(
-                        #     [str(x) for x in range(len((embeddings[i])))],
-                        #     embeddings[i]
-                        #     ))
-                        'embeddings':xy[i]
+                        'predicted_genders':"M" if predicted_genders[i][0] < 0.5 else "F"
+                        # ,'embeddings':list(embeddings[i])
                         } for i, d in enumerate(detected)]   
 
             output = '\n'.join(['|'.join(i) for i in response])
@@ -231,8 +217,7 @@ def main():
         	print(output)
         	# upload(output)
 def remain():
-    end_demo = False
-    while not end_demo:
+    while True:
         try:
             main()
         except: 
