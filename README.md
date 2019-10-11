@@ -32,29 +32,28 @@ Run on Windows. Requires Visual Studio 2016+, cmake and patience
 
 Best practice is to use a conda environment.
 
-```
-$ conda update conda
-$ conda create -n py36 python=3.6
-$ conda activate py36
+```sh
+conda update conda
+conda create -n py36 python=3.6
+conda activate py36
 ```
 
 ### Installation
 
-```
-$ git clone https://github.com/adilkhan49/age-gender-estimation.git
-$ cd age-gender-estimation
-$ python pip install -r requirements
+```sh
+git clone https://github.com/adilkhan49/age-gender-estimation.git
+cd age-gender-estimation
+python pip install -r requirements
 ```
 
 ### Use pretrained model for demo
 Run the demo script (requires web cam).
-You can use `--image_dir [IMAGE_DIR]` option to use images in the `[IMAGE_DIR]` directory instead.
 
 ```sh
 python3 run.py
 ```
 
-Press Space bar to caputre and stream to S3. AWS Access Keys need to be added to settings.py for this to work.
+Press Space bar to capture and stream to S3. AWS access keys need to be added to settings.py for this to work
 
 The pretrained model for TensorFlow backend will be automatically downloaded to the `pretrained_models` directory.
 
