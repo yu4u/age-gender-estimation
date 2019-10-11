@@ -32,15 +32,19 @@ Run on Windows. Requires Visual Studio 2016+, cmake and patience
 
 Best practice is to use a conda environment.
 
-```$ conda update conda
+```
+$ conda update conda
 $ conda create -n py36 python=3.6
-$ conda activate py36```
+$ conda activate py36
+```
 
 ### Installation
 
-```$ git clone https://github.com/adilkhan49/age-gender-estimation.git
+```
+$ git clone https://github.com/adilkhan49/age-gender-estimation.git
 $ cd age-gender-estimation
-$ python pip install -r requirements```
+$ python pip install -r requirements
+```
 
 ### Use pretrained model for demo
 Run the demo script (requires web cam).
