@@ -2,19 +2,14 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
-- [Jun. 30, 2019] [Another PyTorch-based project](https://github.com/yu4u/age-estimation-pytorch) was released
-- [Nov. 12, 2018] Enable Adam optimizer; seems to be better than momentum SGD
-- [Sep. 23, 2018] Demo from directory
-- [Aug. 11, 2018] Add age estimation sub-project [here](age_estimation)
-- [Jul. 5, 2018] The UTKFace dataset became available for training.
-- [Apr. 10, 2018] Evaluation result on the APPA-REAL dataset was added.
-
 ## Dependencies
 - Python3.5+
 - Keras2.0+
 - scipy, numpy, Pandas, tqdm, tables, h5py
 - dlib (for demo)
-- OpenCV3
+- boto3
+- face_recognition
+- uuid
 
 Tested on:
 - Ubuntu 16.04, Python 3.5.2, Keras 2.0.3, Tensorflow(-gpu) 1.0.1, Theano 0.9.0, CUDA 8.0, cuDNN 5.0
@@ -24,13 +19,38 @@ Tested on:
 
 ## Usage
 
+### Setting up your environment
+
+Option 1:
+
+Run in a Docker machine. For Docker to connect to a local webcam the OS must be Linux
+https://www.learnopencv.com/install-opencv-docker-image-ubuntu-macos-windows/
+
+Option 2:
+
+Run on Windows. Requires Visual Studio 2016+, cmake and patience
+
+Best practice is to use a conda environment.
+
+```$ conda update conda
+$ conda create -n py36 python=3.6
+$ conda activate py36```
+
+### Installation
+
+```$ git clone https://github.com/adilkhan49/age-gender-estimation.git
+$ cd age-gender-estimation
+$ python pip install -r requirements```
+
 ### Use pretrained model for demo
 Run the demo script (requires web cam).
 You can use `--image_dir [IMAGE_DIR]` option to use images in the `[IMAGE_DIR]` directory instead.
 
 ```sh
-python3 demo.py
+python3 run.py
 ```
+
+Press Space bar to caputre and stream to S3. AWS Access Keys need to be added to settings.py for this to work.
 
 The pretrained model for TensorFlow backend will be automatically downloaded to the `pretrained_models` directory.
 
