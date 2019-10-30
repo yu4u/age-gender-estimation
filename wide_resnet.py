@@ -23,7 +23,7 @@ class WideResNet:
         self._use_bias = False
         self._weight_init = "he_normal"
 
-        if K.image_dim_ordering() == "th":
+        if K.image_data_format() == "channels_first":
             logging.debug("image_dim_ordering = 'th'")
             self._channel_axis = 1
             self._input_shape = (3, image_size, image_size)
