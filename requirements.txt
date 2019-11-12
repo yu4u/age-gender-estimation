@@ -1,4 +1,5 @@
 opencv-python
+cmake
 dlib
 imutils
 tensorflow
