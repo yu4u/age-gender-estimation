@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import hydra
 from hydra.utils import to_absolute_path
+import tensorflow as tf
 from tensorflow.keras.callbacks import LearningRateScheduler, ModelCheckpoint
 from src.factory import get_model, get_optimizer, get_scheduler
 from src.generator import ImageSequence
@@ -16,11 +17,16 @@ def main(cfg):
     train, val = train_test_split(df, random_state=42, test_size=0.1)
     train_gen = ImageSequence(cfg, train)
     val_gen = ImageSequence(cfg, val)
-    model = get_model(cfg)
-    opt = get_optimizer(cfg)
-    scheduler = get_scheduler(cfg)
-    model.compile(optimizer=opt, loss=["categorical_crossentropy", "categorical_crossentropy"],
-                  metrics=['accuracy'])
+
+    strategy = tf.distribute.MirroredStrategy()
+
+    with strategy.scope():
+        model = get_model(cfg)
+        opt = get_optimizer(cfg)
+        scheduler = get_scheduler(cfg)
+        model.compile(optimizer=opt, loss=["categorical_crossentropy", "categorical_crossentropy"],
+                      metrics=['accuracy'])
+
     checkpoint_dir = Path(to_absolute_path(__file__)).parent.joinpath("checkpoint")
     checkpoint_dir.mkdir(exist_ok=True)
     callbacks = [
