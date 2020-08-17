@@ -1,4 +1,5 @@
 from pathlib import Path
+import multiprocessing
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import hydra
@@ -31,7 +32,8 @@ def main(cfg):
                         mode="auto")
     ]
 
-    hist = model.fit(train_gen, epochs=cfg.train.epochs, callbacks=callbacks, validation_data=val_gen)
+    hist = model.fit(train_gen, epochs=cfg.train.epochs, callbacks=callbacks, validation_data=val_gen,
+                     workers=multiprocessing.cpu_count())
 
 
 if __name__ == '__main__':
