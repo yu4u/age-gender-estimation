@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 import hydra
 from hydra.utils import to_absolute_path
 from tensorflow.keras.callbacks import LearningRateScheduler, ModelCheckpoint
-
 from src.factory import get_model, get_optimizer, get_scheduler
 from src.generator import ImageSequence
 
@@ -21,19 +20,18 @@ def main(cfg):
     scheduler = get_scheduler(cfg)
     model.compile(optimizer=opt, loss=["categorical_crossentropy", "categorical_crossentropy"],
                   metrics=['accuracy'])
-    model.summary()
-
+    checkpoint_dir = Path(to_absolute_path(__file__)).parent.joinpath("checkpoint")
+    checkpoint_dir.mkdir(exist_ok=True)
     callbacks = [
         LearningRateScheduler(schedule=scheduler),
-        ModelCheckpoint("checkpoint/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
+        ModelCheckpoint(str(checkpoint_dir) + "weights.{epoch:02d}-{val_loss:.2f}.hdf5",
                         monitor="val_loss",
                         verbose=1,
                         save_best_only=True,
                         mode="auto")
     ]
 
-    hist = model.fit(train_gen, batch_size=cfg.model.batch_size, epochs=cfg.train.epochs, callbacks=callbacks,
-                     validation_data=val_gen)
+    hist = model.fit(train_gen, epochs=cfg.train.epochs, callbacks=callbacks, validation_data=val_gen)
 
 
 if __name__ == '__main__':
