@@ -15,7 +15,7 @@ def main(cfg):
     if cfg.wandb.project:
         import wandb
         from wandb.keras import WandbCallback
-        wandb.init(project="age-gender-estimation")
+        wandb.init(project=cfg.wandb.project)
         callbacks = [WandbCallback()]
     else:
         callbacks = []
