@@ -24,7 +24,8 @@ def main(cfg):
         model = get_model(cfg)
         opt = get_optimizer(cfg)
         scheduler = get_scheduler(cfg)
-        model.compile(optimizer=opt, loss=["categorical_crossentropy", "categorical_crossentropy"],
+        model.compile(optimizer=opt,
+                      loss=["sparse_categorical_crossentropy", "sparse_categorical_crossentropy"],
                       metrics=['accuracy'])
 
     checkpoint_dir = Path(to_absolute_path(__file__)).parent.joinpath("checkpoint")
