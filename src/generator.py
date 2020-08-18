@@ -6,12 +6,8 @@ from tensorflow.keras.utils import Sequence
 
 
 transforms = A.Compose([
-    A.OneOf([
-        A.ShiftScaleRotate(shift_limit=0.03125, scale_limit=0.20, rotate_limit=20, border_mode=cv2.BORDER_CONSTANT,
-                           value=0, p=1.0),
-        A.IAAAffine(scale=(0.8, 1.2), translate_percent=(-0.03125, 0.03125), rotate=(-10, 10), shear=(-40, 40),
-                    mode="constant", p=1.0)
-    ]),
+    A.ShiftScaleRotate(shift_limit=0.03125, scale_limit=0.20, rotate_limit=20, border_mode=cv2.BORDER_CONSTANT,
+                       value=0, p=1.0),
     A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
     A.HorizontalFlip(p=0.5)
 ])
