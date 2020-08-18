@@ -10,3 +10,6 @@ train:
   optimizer_name: adam
   lr: 0.001
   epochs: 30
+
+wandb:
+  project: null

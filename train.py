@@ -12,6 +12,14 @@ from src.generator import ImageSequence
 
 @hydra.main(config_path="src/config.yaml")
 def main(cfg):
+    if cfg.wandb.project:
+        import wandb
+        from wandb.keras import WandbCallback
+        wandb.init(project="age-gender-estimation")
+        callbacks = [WandbCallback()]
+    else:
+        callbacks = []
+
     csv_path = Path(to_absolute_path(__file__)).parent.joinpath("meta", f"{cfg.data.db}.csv")
     df = pd.read_csv(str(csv_path))
     train, val = train_test_split(df, random_state=42, test_size=0.1)
@@ -30,17 +38,17 @@ def main(cfg):
 
     checkpoint_dir = Path(to_absolute_path(__file__)).parent.joinpath("checkpoint")
     checkpoint_dir.mkdir(exist_ok=True)
-    callbacks = [
+    callbacks.extend([
         LearningRateScheduler(schedule=scheduler),
         ModelCheckpoint(str(checkpoint_dir) + "/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
                         monitor="val_loss",
                         verbose=1,
                         save_best_only=True,
                         mode="auto")
-    ]
+    ])
 
-    hist = model.fit(train_gen, epochs=cfg.train.epochs, callbacks=callbacks, validation_data=val_gen,
-                     workers=multiprocessing.cpu_count())
+    model.fit(train_gen, epochs=cfg.train.epochs, callbacks=callbacks, validation_data=val_gen,
+              workers=multiprocessing.cpu_count())
 
 
 if __name__ == '__main__':
