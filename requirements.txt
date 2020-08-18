@@ -9,3 +9,4 @@ tqdm
 h5py
 tables
 hydra-core
+scikit-learn
