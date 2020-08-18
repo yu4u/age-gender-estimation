@@ -23,8 +23,8 @@ def main(cfg):
     csv_path = Path(to_absolute_path(__file__)).parent.joinpath("meta", f"{cfg.data.db}.csv")
     df = pd.read_csv(str(csv_path))
     train, val = train_test_split(df, random_state=42, test_size=0.1)
-    train_gen = ImageSequence(cfg, train)
-    val_gen = ImageSequence(cfg, val)
+    train_gen = ImageSequence(cfg, train, "train")
+    val_gen = ImageSequence(cfg, val, "val")
 
     strategy = tf.distribute.MirroredStrategy()
 
