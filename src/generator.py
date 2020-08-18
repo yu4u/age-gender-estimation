@@ -26,8 +26,8 @@ class ImageSequence(Sequence):
             ages.append(row["ages"])
 
         imgs = np.asarray(imgs)
-        genders = to_categorical(genders, 2)
-        ages = to_categorical(ages, 101)
+        genders = np.asarray(genders)
+        ages = np.asarray(ages)
 
         return imgs, (genders, ages)
 
