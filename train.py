@@ -38,9 +38,12 @@ def main(cfg):
 
     checkpoint_dir = Path(to_absolute_path(__file__)).parent.joinpath("checkpoint")
     checkpoint_dir.mkdir(exist_ok=True)
+    filename = "_".join([cfg.model.model_name,
+                         str(cfg.model.img_size),
+                         "weights.{epoch:02d}-{val_loss:.2f}.hdf5"])
     callbacks.extend([
         LearningRateScheduler(schedule=scheduler),
-        ModelCheckpoint(str(checkpoint_dir) + "/" + cfg.model.model_name + "_weights.{epoch:02d}-{val_loss:.2f}.hdf5",
+        ModelCheckpoint(str(checkpoint_dir) + "/" + filename,
                         monitor="val_loss",
                         verbose=1,
                         save_best_only=True,
