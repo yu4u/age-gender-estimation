@@ -40,7 +40,7 @@ def main(cfg):
     checkpoint_dir.mkdir(exist_ok=True)
     callbacks.extend([
         LearningRateScheduler(schedule=scheduler),
-        ModelCheckpoint(str(checkpoint_dir) + "/weights.{epoch:02d}-{val_loss:.2f}.hdf5",
+        ModelCheckpoint(str(checkpoint_dir) + "/" + cfg.model.model_name + "_weights.{epoch:02d}-{val_loss:.2f}.hdf5",
                         monitor="val_loss",
                         verbose=1,
                         save_best_only=True,
