@@ -3,13 +3,13 @@ data:
 
 model:
   model_name: ResNet50V2
-  img_size: 64
-  batch_size: 32
+  img_size: 128
 
 train:
   optimizer_name: adam
   lr: 0.001
   epochs: 30
+  batch_size: 128
 
 wandb:
   project: null
