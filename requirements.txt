@@ -11,3 +11,4 @@ tables
 hydra-core
 scikit-learn
 albumentations
+omegaconf
