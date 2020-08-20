@@ -19,7 +19,7 @@ Tested on:
 
 ## Usage
 
-### Use pretrained model for demo
+### Use trained model for demo
 Run the demo script (requires web cam).
 You can use `--image_dir [IMAGE_DIR]` option to use images in the `[IMAGE_DIR]` directory instead.
 
@@ -27,7 +27,7 @@ You can use `--image_dir [IMAGE_DIR]` option to use images in the `[IMAGE_DIR]` 
 python demo.py
 ```
 
-The pretrained model for TensorFlow backend will be automatically downloaded to the `pretrained_models` directory.
+The trained model will be automatically downloaded to the `pretrained_models` directory.
 
 ### Create training data from the IMDB-WIKI dataset
 First, download the dataset.
@@ -37,7 +37,7 @@ The dataset is downloaded and extracted to the `data` directory by:
 ./download.sh
 ```
 
-Secondly, filter out noise data and serialize images and labels for training into `.mat` file.
+Secondly, filter out noise data and serialize labels into `.csv` file.
 Please check [check_dataset.ipynb](check_dataset.ipynb) for the details of the dataset.
 The training data is created by:
 
@@ -57,7 +57,7 @@ optional arguments:
 ```
 
 The resulting files with default parameters are included in this repo (meta/imdb.csv and meta/wiki.csv),
-thus there is no need to run this again.
+thus there is no need to run this by yourself.
 
 
 ### Create training data from the UTKFace dataset [currently not supported]
@@ -85,8 +85,8 @@ python demo.py --weight_file WEIGHT_FILE --margin 0
 
 The pre-trained weights can be found [here](https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.29-3.76_utk.hdf5).
 
-### Train network
-Train the network using the training data created above.
+### Train model
+Train the model architecture using the training data created above:
 
 ```sh
 python train.py
@@ -108,10 +108,11 @@ The training logs can be easily visualized via [wandb](https://www.wandb.com/) b
 
 1. create account from [here](https://app.wandb.ai/login?signup=true)
 2. create new project in wandb (e.g. "age-gender-estimation")
-3. run training script with `wandb.project=age-gender-estimation` argument
-4. check dashboard!
+3. run `wandb login` on terminal and authorize
+4. run training script with `wandb.project=age-gender-estimation` argument
+5. check dashboard!
 
-### Use the trained network
+### Use the trained model
 
 ```sh
 python demo.py
@@ -151,7 +152,7 @@ Trained on imdb, tested on wiki.
 You can evaluate a trained model on the APPA-REAL (validation) dataset by:
 
 ```bash
-python evaluate_appa_real.py
+python evaluate_appa_real.py --weight_file WEIGHT_FILE
 ```
 
 Please refer to [here](appa-real) for the details of the APPA-REAL dataset.
