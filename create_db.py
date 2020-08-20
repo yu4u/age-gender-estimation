@@ -4,7 +4,7 @@ import pandas as pd
 import argparse
 from tqdm import tqdm
 
-from utils import get_meta
+from src.utils import get_meta
 
 
 def get_args():
