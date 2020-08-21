@@ -4,8 +4,10 @@ import dlib
 import numpy as np
 import argparse
 from contextlib import contextmanager
-from wide_resnet import WideResNet
-from keras.utils.data_utils import get_file
+from omegaconf import OmegaConf
+from tensorflow.keras.utils import get_file
+from src.factory import get_model
+
 
 pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
 modhash = 'fbe63257a054c1c5466cfd7bf14646d6'
@@ -17,10 +19,6 @@ def get_args():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--weight_file", type=str, default=None,
                         help="path to weight file (e.g. weights.28-3.73.hdf5)")
-    parser.add_argument("--depth", type=int, default=16,
-                        help="depth of network")
-    parser.add_argument("--width", type=int, default=8,
-                        help="width of network")
     parser.add_argument("--margin", type=float, default=0.4,
                         help="margin around detected face for age-gender estimation")
     parser.add_argument("--image_dir", type=str, default=None,
@@ -76,8 +74,6 @@ def yield_images_from_dir(image_dir):
 
 def main():
     args = get_args()
-    depth = args.depth
-    k = args.width
     weight_file = args.weight_file
     margin = args.margin
     image_dir = args.image_dir
@@ -90,8 +86,10 @@ def main():
     detector = dlib.get_frontal_face_detector()
 
     # load model and weights
-    img_size = 64
-    model = WideResNet(img_size, depth=depth, k=k)()
+    model_name, img_size = Path(weight_file).stem.split("_")[:2]
+    img_size = int(img_size)
+    cfg = OmegaConf.from_dotlist([f"model.model_name={model_name}", f"model.img_size={img_size}"])
+    model = get_model(cfg)
     model.load_weights(weight_file)
 
     image_generator = yield_images_from_dir(image_dir) if image_dir else yield_images()
@@ -113,7 +111,7 @@ def main():
                 yw2 = min(int(y2 + margin * h), img_h - 1)
                 cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
                 # cv2.rectangle(img, (xw1, yw1), (xw2, yw2), (255, 0, 0), 2)
-                faces[i, :, :, :] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
+                faces[i] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1], (img_size, img_size))
 
             # predict ages and genders of the detected faces
             results = model.predict(faces)

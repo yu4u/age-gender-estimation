@@ -1,0 +1,15 @@
+data:
+  db: imdb
+
+model:
+  model_name: EfficientNetB3
+  img_size: 224
+
+train:
+  optimizer_name: adam
+  lr: 0.001
+  epochs: 30
+  batch_size: 32
+
+wandb:
+  project: null

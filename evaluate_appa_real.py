@@ -5,8 +5,10 @@ import pandas as pd
 import argparse
 from tqdm import tqdm
 from pathlib import Path
-from wide_resnet import WideResNet
-from keras.utils.data_utils import get_file
+from omegaconf import OmegaConf
+from tensorflow.keras.utils import get_file
+from src.factory import get_model
+
 
 pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
 modhash = "fbe63257a054c1c5466cfd7bf14646d6"
@@ -18,18 +20,12 @@ def get_args():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--weight_file", type=str, default=None,
                         help="path to weight file (e.g. weights.28-3.73.hdf5)")
-    parser.add_argument("--depth", type=int, default=16,
-                        help="depth of network")
-    parser.add_argument("--width", type=int, default=8,
-                        help="width of network")
     args = parser.parse_args()
     return args
 
 
 def main():
     args = get_args()
-    depth = args.depth
-    k = args.width
     weight_file = args.weight_file
 
     if not weight_file:
@@ -37,14 +33,17 @@ def main():
                                file_hash=modhash, cache_dir=os.path.dirname(os.path.abspath(__file__)))
 
     # load model and weights
-    img_size = 64
-    batch_size = 32
-    model = WideResNet(img_size, depth=depth, k=k)()
+    model_name, img_size = Path(weight_file).stem.split("_")[:2]
+    img_size = int(img_size)
+    cfg = OmegaConf.from_dotlist([f"model.model_name={model_name}", f"model.img_size={img_size}"])
+    model = get_model(cfg)
     model.load_weights(weight_file)
+
     dataset_root = Path(__file__).parent.joinpath("appa-real", "appa-real-release")
     validation_image_dir = dataset_root.joinpath("valid")
     gt_valid_path = dataset_root.joinpath("gt_avg_valid.csv")
     image_paths = list(validation_image_dir.glob("*_face.jpg"))
+    batch_size = 8
 
     faces = np.empty((batch_size, img_size, img_size, 3))
     ages = []

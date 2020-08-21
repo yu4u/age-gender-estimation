@@ -1,21 +1,18 @@
+from pathlib import Path
 import numpy as np
-import cv2
-import scipy.io
+import pandas as pd
 import argparse
 from tqdm import tqdm
-from utils import get_meta
+
+from src.utils import get_meta
 
 
 def get_args():
     parser = argparse.ArgumentParser(description="This script cleans-up noisy labels "
                                                  "and creates database for training.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--output", "-o", type=str, required=True,
-                        help="path to output database mat file")
-    parser.add_argument("--db", type=str, default="wiki",
+    parser.add_argument("--db", type=str, default="imdb",
                         help="dataset; wiki or imdb")
-    parser.add_argument("--img_size", type=int, default=32,
-                        help="output image size")
     parser.add_argument("--min_score", type=float, default=1.0,
                         help="minimum face_score")
     args = parser.parse_args()
@@ -24,20 +21,17 @@ def get_args():
 
 def main():
     args = get_args()
-    output_path = args.output
     db = args.db
-    img_size = args.img_size
     min_score = args.min_score
-
-    root_path = "data/{}_crop/".format(db)
-    mat_path = root_path + "{}.mat".format(db)
+    root_dir = Path(__file__).parent
+    data_dir = root_dir.joinpath("data", f"{db}_crop")
+    mat_path = data_dir.joinpath(f"{db}.mat")
     full_path, dob, gender, photo_taken, face_score, second_face_score, age = get_meta(mat_path, db)
 
-    out_genders = []
-    out_ages = []
+    genders = []
+    ages = []
+    img_paths = []
     sample_num = len(face_score)
-    out_imgs = np.empty((sample_num, img_size, img_size, 3), dtype=np.uint8)
-    valid_sample_num = 0
 
     for i in tqdm(range(sample_num)):
         if face_score[i] < min_score:
@@ -52,15 +46,16 @@ def main():
         if np.isnan(gender[i]):
             continue
 
-        out_genders.append(int(gender[i]))
-        out_ages.append(age[i])
-        img = cv2.imread(root_path + str(full_path[i][0]))
-        out_imgs[valid_sample_num] = cv2.resize(img, (img_size, img_size))
-        valid_sample_num += 1
+        genders.append(int(gender[i]))
+        ages.append(age[i])
+        img_paths.append(full_path[i][0])
 
-    output = {"image": out_imgs[:valid_sample_num], "gender": np.array(out_genders), "age": np.array(out_ages),
-              "db": db, "img_size": img_size, "min_score": min_score}
-    scipy.io.savemat(output_path, output)
+    outputs = dict(genders=genders, ages=ages, img_paths=img_paths)
+    output_dir = root_dir.joinpath("meta")
+    output_dir.mkdir(exist_ok=True)
+    output_path = output_dir.joinpath(f"{db}.csv")
+    df = pd.DataFrame(data=outputs)
+    df.to_csv(str(output_path), index=False)
 
 
 if __name__ == '__main__':
