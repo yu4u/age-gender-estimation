@@ -2,7 +2,7 @@
 This is a Keras implementation of a CNN for estimating age and gender from a face image [1, 2].
 In training, [the IMDB-WIKI dataset](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/) is used.
 
-- [XXX] Clean up whole project; use tensorflow.keras
+- [Aug. 21, 2020] Refactored; use tensorflow.keras
 - [Jun. 30, 2019] [Another PyTorch-based project](https://github.com/yu4u/age-estimation-pytorch) was released
 - [Nov. 12, 2018] Enable Adam optimizer; seems to be better than momentum SGD
 - [Sep. 23, 2018] Demo from directory
@@ -157,11 +157,11 @@ python evaluate_appa_real.py --weight_file WEIGHT_FILE
 
 Please refer to [here](appa-real) for the details of the APPA-REAL dataset.
 
-The results of pretrained model is:
+The results of trained model is:
 
 ```
-MAE Apparent: 5.74
-MAE Real: 6.66
+MAE Apparent: 5.33
+MAE Real: 6.22
 ```
 
 The best result reported in [5] is:
@@ -171,9 +171,7 @@ MAE Apparent: 4.08
 MAE Real: 5.30
 ```
 
-Please note that the above result was achieved by finetuning the model using the training set of the APPA-REAL dataset,
-while the pretrained model here is not and the size of images is small (128 vs. 224).
-
+Please note that the above result was achieved by finetuning the model using the training set of the APPA-REAL dataset.
 
 ## License
 This project is released under the MIT license.
