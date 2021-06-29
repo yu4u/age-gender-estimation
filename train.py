@@ -10,7 +10,7 @@ from src.factory import get_model, get_optimizer, get_scheduler
 from src.generator import ImageSequence
 
 
-@hydra.main(config_path="src/config.yaml")
+@hydra.main(config_path="src", config_name="config")
 def main(cfg):
     if cfg.wandb.project:
         import wandb
